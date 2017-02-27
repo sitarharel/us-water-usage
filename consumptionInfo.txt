@@ -1,0 +1,4 @@
+//https://water.usgs.gov/edu/qa-home-percapita.html
+
+Each person uses 80-100 gallons of water per day
+Most of that water goes down the drain (toilet, showers and baths)
