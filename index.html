@@ -9,107 +9,40 @@ body {
   stroke: #000;
 }
 
+svg {
+  display: block;
+  margin: auto;
+  /*outline: solid thin black;*/
+}
+
 .chord {
   fill-opacity: 0.67
   stroke: none;
 }
 
 </style>
-<svg width="960" height="5000">
+<svg width="1000" height="10000">
  <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
-      <stop offset="100%" style="stop-color:rgb(30,200,255);stop-opacity:1" />
+      <stop offset="10%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(49, 133, 216);stop-opacity:1" />
+    </linearGradient>
+     <linearGradient id="backgrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(49, 133, 216);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="fadeout" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
+      <stop offset="50%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
+      <!-- <stop offset="90%" style="stop-color:rgb(100,100,255);stop-opacity:1" /> -->
+      <stop offset="100%" style="stop-color:rgb(255,255,255);stop-opacity:1" />
     </linearGradient>
 </svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
-
-function Chord(startx, starty, endx, endy, startWidth, endWidth, bend_len){
-  this.startx = startx || 0;
-  this.starty = starty;
-  this.endx = endx;
-  this.endy = endy;
-  this.startWidth = startWidth || 0;
-  this.endWidth = endWidth || startWidth;
-  this.bend_len = bend_len || (endy - starty) / 2;
-  this.path = function(){
-    return "M" + this.startx + " " + this.starty + " C" + this.startx + " " 
-              + (this.starty + this.bend_len) + " " + this.endx + " " 
-              + (this.endy - this.bend_len) + " " + this.endx + " " 
-              + this.endy + " L" + (this.endx + this.endWidth) + " " 
-              + this.endy + " C" + (this.endx + this.endWidth) + " " 
-              + (this.endy - this.bend_len) + " " + (this.startx + this.startWidth) 
-              + " " + (this.starty + this.bend_len) + " " 
-              + (this.startx + this.startWidth) + " " + this.starty + " L" 
-              + this.startx + " " + this.starty + " Z";
-  }
-}
-
-function Stream(startsize, splits, height, x_offset, y_offset) {
-  this.size = startsize;
-  this.splits = splits;
-  this.height = height || 1000;
-  this.x_offset = x_offset || 100;
-  this.y_offset = y_offset || 0;
-  this.path = function(svg){
-    var split_l = this.height / (this.splits.length + 1);
-    var main_width = this.size;
-    var wiggle = 30;
-    var chords = [new Chord(this.x_offset, this.y_offset, this.x_offset + wiggle, this.y_offset + split_l, main_width)];
-    var px = this.x_offset + wiggle;
-    var py = split_l;
-    for(var i = 0; i < this.splits.length; i++){
-      main_width -= splits[i];
-      if(wiggle < 0){
-      chords.push(new Chord(px, this.y_offset + py, px + wiggle, this.y_offset + py + split_l, main_width));
-      chords.push(new Chord(px + main_width, this.y_offset + py, px + main_width - wiggle, this.y_offset + py + split_l * 1.2, splits[i]));
-
-      }else{
-      chords.push(new Chord(splits[i] + px, this.y_offset + py, splits[i] + px + wiggle, this.y_offset + py + split_l, main_width));
-      chords.push(new Chord(px, this.y_offset + py, px - wiggle, this.y_offset + py + split_l * 1.2, splits[i]));
-      px += splits[i];
-      }
-      px += wiggle;
-      py += split_l;
-      wiggle *= -1;
-    }
-    return chords.reduce((acc, x) => acc + " " + x.path(), "");
-  }
-}
-
-function MergeStream(width, splits, height, stream_margin, x_offset){
-  this.width = width;
-  this.splits = splits;
-  this.height = height || 1000;
-  this.stream_margin = stream_margin || 10;
-  this.x_offset = x_offset || 0;
-  this.path = function(){
-    var mid_width = this.splits.length * this.stream_margin + this.width;
-    var xt = (mid_width - this.width)/2 + this.x_offset - this.stream_margin;
-    var chords = [new Chord(xt, 0, xt , this.height/16, this.width)];
-    var xb = this.x_offset;
-    for(var i = 0; i < splits.length; i++){
-      chords.push(new Chord(xt, this.height/16, xb, this.height/2, splits[i]));
-      chords.push(new Chord(xb, this.height/2, xt, this.height * 15/16, splits[i]));
-      xt += splits[i];
-      xb += splits[i] + this.stream_margin;
-    }
-    xt = (mid_width - this.width)/2 + this.x_offset - this.stream_margin;
-     chords.push(new Chord(xt, this.height * 15/16, xt , this.height, this.width));
-    return chords.reduce((acc, x) => acc + " " + x.path(), "");
-  }
-}
-
-
-var svg = d3.select("svg");
-var streama = new MergeStream(300, [70, 80, 50, 80, 20], 2000, 30);
-var streamb = new Stream(300, [40, 30, 20, 20, 10, 20, 30, 20, 15, 5, 30, 10, 30, 20], 3000, 45, 2000);
-var stream = streama.path() + " " + streamb.path();
-
-svg.append("path")
-.attr("class", "chord")
-.attr("d", stream)
-.attr("fill", "url(#grad)");
+<script type="text/javascript" src="vis.js"></script>
+<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript">
 
 </script>
+
 </html>
