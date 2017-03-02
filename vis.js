@@ -4,9 +4,19 @@ function arraySum(arr){
   }, 0);
 }
 
+  var rand_data = function(num, size) {
+    var res = [];
+    for(var i = 0; i < num; i++){
+      res.push(Math.random());
+    }
+    var scale = size / res.reduce((a, x) => a + x, 0);
+    return res.map((x) => scale * x);
+  }
+
+
 function randomizePath(path_d, texture, randomness){
   // if you input an svg d attribute, it will output it with random texture.
-  var path = svg.append("path").attr("d", path_d);
+  var path = d3.select("svg").append("path").attr("d", path_d);
   var texture = texture || 100;
   var randomness = randomness || 1;
   var length = path.node().getTotalLength();
@@ -15,15 +25,12 @@ function randomizePath(path_d, texture, randomness){
   for(var i = length/texture; i < length; i += length/texture){
     point = path.node().getPointAtLength(i);
     points.push([point.x + Math.random()*randomness - randomness/2, point.y + Math.random()*randomness - randomness/2]);
-    // svg.append("circle")
-    // .attr("cx", point.x)
-    // .attr("cy", point.y)
-    // .attr("r", 2);
   }
   point = path.node().getPointAtLength(length);
   points.push([point.x, point.y]);
-  var d = path.data([points]).attr("d", edge).attr("d");
+  var d = path.data([points]).attr("d", d3.curveNatural).attr("d");
   path.remove();
+  // console.log(d);
   return d;
 }
 
@@ -93,58 +100,61 @@ function Stream(startsize, splits, height, x_offset, y_offset) {
   }
 }
 
-function MergeStream(width, splits, height, stream_margin, x_offset, y_offset){
-  this.width = width > 0 ? width : arraySum(splits);
-  this.splits = splits;
-  this.height = height || 1000;
-  this.stream_margin = stream_margin || 10;
-  this.x_offset = x_offset || 0;
-  this.y_offset = y_offset || 0;
-  this.path = function(){
-    var mid_width = this.splits.length * this.stream_margin + this.width;
-    var xt = this.x_offset;
-    var chords = [new Chord(xt, this.y_offset, xt, this.y_offset + this.height/16, this.width)];
-    var xb = this.x_offset - (mid_width - this.width)/2 + this.stream_margin;
-    for(var i = 0; i < splits.length; i++){
-      chords.push(new Chord(xt, this.y_offset + this.height/16, xb, this.y_offset + this.height/2, splits[i]));
-      chords.push(new Chord(xb, this.y_offset + this.height/2, xt, this.y_offset + this.height * 15/16, splits[i]));
-      xt += splits[i];
-      xb += splits[i] + this.stream_margin;
-    }
-    // xt = (mid_width - this.width)/2 + this.x_offset - this.stream_margin;
-     chords.push(new Chord(this.x_offset, this.y_offset + this.height * 15/16, this.x_offset, this.y_offset + this.height, this.width));
-    return chords.reduce((acc, x) => acc + " " + x.path(), "");
+function mergeStream(width, splits, height, stream_margin, x_offset, y_offset){
+  width = width > 0 ? width : arraySum(splits);
+  splits = splits;
+  height = height || 1000;
+  stream_margin = stream_margin || 10;
+  x_offset = x_offset || 0;
+  y_offset = y_offset || 0;
+  var mid_width = splits.length * stream_margin + width;
+  var xt = x_offset;
+  var chords = [new Chord(xt, y_offset, xt, y_offset + height/16, width)];
+  var xb = x_offset - (mid_width - width)/2 + stream_margin;
+  var result = {path: "", text: []};
+  for(var i = 0; i < splits.length; i++){
+    result.text.push({name: splits[i].name, x: xb + splits[i].val/2, y: y_offset + height/2, val: splits[i].val});
+    chords.push(new Chord(xt, y_offset + height/16, xb, y_offset + height/2, splits[i].val));
+    chords.push(new Chord(xb, y_offset + height/2, xt, y_offset + height * 15/16, splits[i].val));
+    xt += splits[i].val;
+    xb += splits[i].val + stream_margin;
   }
+  // xt = (mid_width - width)/2 + x_offset - stream_margin;
+   chords.push(new Chord(x_offset, y_offset + height * 15/16, x_offset, y_offset + height, width));
+  result.path = chords.reduce((acc, x) => acc + " " + x.path(), "")
+  return result;
 }
 
+function StateStream(width, states, res_index, height, stream_margin, x_offset, y_offset){
+  height = height || 1000;
+  stream_margin = stream_margin || 10;
+  x_offset = x_offset || 0;
+  y_offset = y_offset || 0;
+  var percent_scale = width / states.reduce((a, x) => x.percent + a, 0);
+  states = states.map((x) => {return {name: x.name, percent: x.percent * percent_scale}});
+  var result = {path_fade: "", path_out: "", text: []}
 
-function StateStream(width, splits, res_index, height, stream_margin, x_offset, y_offset){
-  this.width = width > 0 ? width : arraySum(splits);
-  this.splits = splits;
-  this.height = height || 1000;
-  this.stream_margin = stream_margin || 10;
-  this.x_offset = x_offset || 0;
-  this.y_offset = y_offset || 0;
-  this.compute = function(){
-    var mid_width = this.splits.length * this.stream_margin + this.width;
-    var xt = this.x_offset ;
-    var chords = [new Chord(xt, this.y_offset, xt, this.y_offset + this.height/16, this.width)];
-    var out = "";
-    var xb = this.x_offset - ((mid_width - this.width)/2 - this.stream_margin);
-    for(var i = 0; i < splits.length; i++){
-      if(i == res_index){
-        out = out + (new Chord(xt, this.y_offset - 5 + this.height/16, xb, this.y_offset + this.height/2, splits[i])).path();
-        out = out + " " + (new Chord(xb, this.y_offset + this.height/2, this.x_offset, this.y_offset + this.height * 15/16, splits[i], this.width)).path();
-      } else {
-        chords.push(new Chord(xt, this.y_offset + this.height/16, xb, this.y_offset + this.height/2, splits[i]));
-      }
-      xt += splits[i];
-      xb += splits[i] + this.stream_margin;
+  var mid_width = states.length * stream_margin + width;
+  var xt = x_offset;
+  var chords = [new Chord(xt, y_offset - 5, xt, y_offset + height/16, width)];
+  var out = "";
+  var xb = x_offset - ((mid_width - width)/2 - stream_margin);
+  for(var i = 0; i < states.length; i++){
+    if(i == res_index){
+      out = out + (new Chord(xt, y_offset - 5 + height/16, xb, y_offset + height/2, states[i].percent)).path();
+      out = out + " " + (new Chord(xb, y_offset + height/2, x_offset, y_offset + height * 15/16, states[i].percent, width)).path();
+    } else {
+      var y_squish_fac = Math.cos(( xb + states[i].percent/2 - x_offset - width/2)/mid_width);
+      var x_squish_fac = 1 - Math.cos(( xb + states[i].percent/2 - x_offset - width/2)/mid_width);
+      if(xb > x_offset + width/2) x_squish_fac *= -1;
+      result.text.push({name: states[i].name, x: xb + states[i].percent/2 + 90*x_squish_fac, y: y_offset + height/2 - (height/2 + 50) + (height/2) * y_squish_fac});
+      chords.push(new Chord(xt, y_offset + height/16, xb, y_offset + height/2 , states[i].percent));
     }
-     out = out + " " + (new Chord(this.x_offset, this.y_offset + this.height * 15/16, this.x_offset, this.y_offset + this.height, this.width)).path();
-    return [chords.reduce((acc, x) => acc + " " + x.path(), ""), out];
+    xt += states[i].percent;
+    xb += states[i].percent + stream_margin;
   }
-  var comp = this.compute();
-  this.path = comp[0];
-  this.res = comp[1];
+  out = out + " " + (new Chord(x_offset, y_offset + height * 15/16, x_offset, y_offset + height, width)).path();
+  result.path_fade = chords.reduce((acc, x) => acc + " " + x.path(), ""),
+  result.path_out = out;
+  return result;
 }

@@ -1,65 +1,62 @@
-var svg = d3.select("svg");
-var rand_data = function(num, size) {
-  var res = [];
-  for(var i = 0; i < num; i++){
-    res.push(Math.random());
-  }
-  var scale = size / res.reduce((a, x) => a + x, 0);
-  return res.map((x) => scale * x);
+function visualize(usData, stateData, statePercents){
+  var svg = d3.select("svg");
+
+  // these temp things definitely should not be kept in, instead fix in parseData.js
+  var tempSectors = Object.keys(usData).reduce((a, x)=>{if(x.slice(-7) == "percent" && a.length < 12){a.push({name: x.slice(0, 2), val: usData[x]});} return a}, []);
+  var scale = 500 / tempSectors.reduce((a, x) => a + x.val, 0);
+  tempSectors = tempSectors.map((x) => {return {name: x.name, val: x.val * scale}});
+
+  var tempStates = Object.keys(statePercents).map((x) => {return {name: x, percent: statePercents[x]}});
+
+  var sectorstream = mergeStream(500, tempSectors, 3000, 30, 300, 1500);
+  var statesplit = new StateStream(500, tempStates, 32, 3000, 11, 300, 4500);
+  var topstream = new Chord(500, 500, 300, 1500, 120, 500);
+
+
+  svg.append("path")
+  .attr("d", topstream.path())
+  .attr("class", "chord")
+  .attr("fill", "url(#grad)");
+
+  svg.append("path")
+  .attr("d", sectorstream.path)
+  .attr("class", "chord")
+  .attr("fill", "url(#backgrad)");
+
+  svg.selectAll("g.us_sector")
+  .data(sectorstream.text)
+  .enter()
+  .append("text")
+  .text((d) => d.name)
+  .attr("text-anchor", "middle")
+  .attr("x", (t) => t.x)
+  .attr("y", (t) => t.y)
+
+
+  svg.append("path")
+  .attr("d", statesplit.path_fade)
+  .attr("class", "chord")
+  .attr("fill", "url(#circfadeout)");
+
+  svg.append("path")
+  .attr("d", statesplit.path_out)
+  .attr("class", "chord")
+  .attr("fill", "url(#grad)");
+
+
+  svg.selectAll("g.states")
+  .data(statesplit.text)
+  .enter()
+  .append("text")
+  .text((d) => d.name)
+  .attr("text-anchor", "middle")
+  .attr("x", (t) => t.x)
+  .attr("y", (t) => t.y)
+
+  svg.append("image")
+  .attr("href", "tap.svg")
+  .attr("x", "430")
+  .attr("y", "0")
+  .attr("height", "800px")
+  .attr("width", "800px")
 }
-
-var stream = new MergeStream(550, rand_data(10, 550), 3000, 50, 200, 1500);
-var statesplit = new StateStream(550, rand_data(50, 550), 25, 2000, 10, 200, 4500);
-var streamb = new Stream(550, [100, 75, 50, 75, 50, 100, 100], 3000, 200, 6497);
-var topstream = new Chord(420, 500, 200, 1500, 120, 550);
-
-
-
-
-
-svg.append("path")
-.attr("d", topstream.path())
-.attr("class", "chord")
-.attr("fill", "url(#grad)");
-
-svg.append("path")
-.attr("d", stream.path())
-.attr("class", "chord")
-.attr("fill", "url(#backgrad)");
-
-svg.append("path")
-.attr("d", statesplit.path)
-.attr("class", "chord")
-.attr("fill", "url(#circfadeout)");
-
-svg.append("path")
-.attr("d", statesplit.res)
-.attr("class", "chord")
-.attr("fill", "url(#grad)");
-
-svg.append("path")
-.attr("d", streamb.path())
-.attr("class", "chord")
-.attr("fill", "url(#backgrad)");
-
-svg.append("image")
-.attr("href", "tap.svg")
-.attr("x", "350")
-.attr("y", "0")
-.attr("height", "800px")
-.attr("width", "800px")
-
-// // curveNatural
-// var edge = d3.line().curve(d3.curveNatural)
-
-// // console.log(path.attr('d'));
-// svg.append("path")
-//     .attr("d", 
-//       randomizePath(new Chord(10, 10, 300, 1000, 100).right(), 10, 10))
-//     .attr("class", "test");
-
-// svg.append("path")
-//     .attr("d", 
-//       randomizePath(new Chord(10, 10, 300, 1000, 100).left(), 10, 10))
-//     .attr("class", "test");
-

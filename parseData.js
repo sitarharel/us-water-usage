@@ -62,7 +62,7 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
     statePercents[d.values["state"]] = parseFloat(d.values["to-wtotl"])/parseFloat(usData["to-wtotl"]);
     calcPercent(d.values);
   })
-  
   calcPercent(usData);
+  visualize(usData, stateData, statePercents);
 
 });
