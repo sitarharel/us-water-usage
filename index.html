@@ -9,6 +9,11 @@ body {
   stroke: #000;
 }
 
+path.test{
+  fill: none;
+  stroke: black;
+}
+
 svg {
   display: block;
   margin: auto;
@@ -21,7 +26,7 @@ svg {
 }
 
 </style>
-<svg width="1000" height="10000">
+<svg width="1200" height="10000">
  <linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
       <stop offset="10%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
@@ -31,12 +36,22 @@ svg {
       <stop offset="0%" style="stop-color:rgb(49, 133, 216);stop-opacity:1" />
       <stop offset="100%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
     </linearGradient>
+    <radialGradient id="circfadeout"
+          cx="50%" cy="0%" r="100%" fx="50%" fy="0%
+          ">
+      <stop offset="0%" stop-color="rgb(30,10,255)"/>
+      <stop offset="40%" stop-color="rgb(30,10,255)"/>
+      <stop offset="100%" stop-color="white"/>
+    </radialGradient>
+
     <linearGradient id="fadeout" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
       <stop offset="50%" style="stop-color:rgb(30,10,255);stop-opacity:1" />
       <!-- <stop offset="90%" style="stop-color:rgb(100,100,255);stop-opacity:1" /> -->
       <stop offset="100%" style="stop-color:rgb(255,255,255);stop-opacity:1" />
     </linearGradient>
+
+
 </svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script type="text/javascript" src="vis.js"></script>
