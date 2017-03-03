@@ -10,7 +10,7 @@ function arraySum(arr){
       res.push(Math.random());
     }
     var scale = size / res.reduce((a, x) => a + x, 0);
-    return res.map((x) => scale * x);
+    return res.map((x) => {return {name: "", percent: scale * x}});
   }
 
 
@@ -35,6 +35,8 @@ function randomizePath(path_d, texture, randomness){
 }
 
 function Chord(startx, starty, endx, endy, startWidth, endWidth, bend_len){
+  // creates a vertical chord object from which you can pull different path strings
+  // there is a vertical tangent at the endpoints so they flow together well
   this.startx = startx || 0;
   this.starty = starty;
   this.endx = endx;
@@ -101,8 +103,7 @@ function Stream(startsize, splits, height, x_offset, y_offset) {
 }
 
 function mergeStream(width, splits, height, stream_margin, x_offset, y_offset){
-  width = width > 0 ? width : arraySum(splits);
-  splits = splits;
+  // splits should be {name: "...", val: ...} where the sum of all vals = width
   height = height || 1000;
   stream_margin = stream_margin || 10;
   x_offset = x_offset || 0;
