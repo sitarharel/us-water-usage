@@ -1,20 +1,14 @@
 function visualize(usData, stateData, statePercents){
   var svg = d3.select("svg");
-
-  // these temp things definitely should not be kept in, instead fix in parseData.js
-  var tempSectors = Object.keys(usData).reduce((a, x)=>{if(x.slice(-7) == "percent" && a.length < 12){a.push({name: x.slice(0, 2), val: usData[x]});} return a}, []);
-  var scale = 500 / tempSectors.reduce((a, x) => a + x.val, 0);
-  tempSectors = tempSectors.map((x) => {return {name: x.name, val: x.val * scale}});
-  // tempSectors.sort((a, b) => b.val - a.val);
-
+ 
   var tempStates = Object.keys(statePercents).map((x) => {return {name: x, percent: statePercents[x]}});
   tempStates.sort((a, b) => b.percent - a.percent);
 
-  var sectorstream = mergeStream(500, tempSectors, 3000, 30, 300, 1500);
-  var statesplit = new StateStream(500, tempStates, 32, 3000, 10, 300, 4500);
-  var nysplit = new StateStream(500, rand_data(10, 500), 5, 3000, 30, 300, 7500);
+  var sectorstream = mergeStream(500, usData, 3000, 30, 300, 1500);
+  var statesplit = StateStream(500, statePercents, 9, 3000, 10, 300, 4500);
+  // var nysplit = new StateStream(500, rand_data(10, 500), 5, 3000, 30, 300, 7500);
   var topstream = new Chord(500, 500, 300, 1500, 120, 500);
-
+  // console.log(statesplit);
 
   var defs = svg.append("defs");
 
