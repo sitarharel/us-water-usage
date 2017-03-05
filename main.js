@@ -1,22 +1,13 @@
 var topOfIntro = 50;
 var topOfSpout = topOfIntro+600;
 
-function visualize(usData, stateData, statePercents){
+function visualize(usData, nyData, statePercents){
   var svg = d3.select("svg");
- 
-  var tempStates = Object.keys(statePercents).map((x) => {return {name: x, percent: statePercents[x]}});
-  tempStates.sort((a, b) => b.percent - a.percent);
 
-// <<<<<<< HEAD
-//   var sectorstream = mergeStream(500, tempSectors, 3000, 30, 300, topOfSpout+1500);
-//   var statesplit = new StateStream(500, tempStates, 32, 3000, 11, 300, topOfSpout+4500);
-//   var topstream = new Chord(500, topOfSpout+500, 320, topOfSpout+1500, 120, 500);
-// =======
-  var sectorstream = mergeStream(500, usData, 3000, 30, 300, 1500);
-  var statesplit = StateStream(500, statePercents, 9, 3000, 10, 300, 4500);
-  // var nysplit = new StateStream(500, rand_data(10, 500), 5, 3000, 30, 300, 7500);
-  var topstream = new Chord(500, 500, 300, 1500, 120, 500);
-  // console.log(statesplit);
+  var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
+  var statesplit = new StateStream(500, statePercents, 32, 3000, 11, 300, topOfSpout+4500);
+  var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1500, 120, 500);
+
 
   var defs = svg.append("defs");
 
@@ -93,10 +84,23 @@ function visualize(usData, stateData, statePercents){
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-top", ["hsl(225, 90%, 61%)", "hsl(235, 90%, 61%)"]));
 
+
+
   svg.append("path")
   .attr("d", sectorstream.path)
   .attr("class", "chord")
+  // .attr("stroke", "black")
   .attr("fill", vertGrad("grad-sector", ["hsl(235, 90%, 61%)", "hsl(240, 100%, 44%)"]));
+
+  // svg.append("path")
+  // .attr("d", sectorstream.path)
+  // .attr("class", "chord")
+  // .attr("fill", "url(#water-pattern)");
+
+  // svg.append("path")
+  // .attr("d", topstream.path())
+  // .attr("class", "chord")
+  // .attr("fill", "url(#water-pattern)");
 
   var sectors = svg.selectAll("g.us_sector")
   .data(sectorstream.text)
@@ -112,7 +116,7 @@ function visualize(usData, stateData, statePercents){
   .attr("height", "60px")
   .attr("width", "60px")
   .attr("x", (t) => t.x - 30)
-  .attr("y", (t, i) => t.y - 100 + 130 * (i % 2));
+  .attr("y", (t, i) => t.y + 45 - 90 * (i % 2));
 
   // svg.append("path")
   // .attr("d", nysplit.path_fade)
