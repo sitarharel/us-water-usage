@@ -1,0 +1,155 @@
+<html>  
+  <head>
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Tangerine">
+    <style>
+      body { font-family: font-family: 'Yanone Kaffeesatz', sans-serif; }
+    </style>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<div id="a"></div>
+<body>
+	
+<script>			
+  var svg = d3.select("#a")
+            .append("svg")
+            .attr("width", 1200)
+            .attr("height", 5000);
+			
+
+  var topOfIntro = 400;
+  var topOfSpout = topOfIntro+600;
+  var svg = d3.select("svg");
+  
+  
+  
+
+  
+  svg.append("text")
+  .text("each day 41 billion gallons of water fall")
+  .attr("x", 740)
+  .attr("y", 280)
+  .style("font-size", "29px")
+  
+  
+  
+  svg.append("path")
+  .attr("d", "M850 289 L1052 289")
+  .attr("stroke", "blue")
+  .attr("stroke-width", 3);
+  
+  svg.append("image")
+  .attr("href", "us-map.svg")
+  .attr("x", 50)
+  .attr("y", 600)
+  .attr("height", 600)
+  .attr("width", 600);
+  
+  svg.append("image")
+  .attr("href", "man-drinking.svg")
+  .attr("x", 50)
+  .attr("y", 750)
+  .attr("height", 200)
+  .attr("width", 200);
+  
+  
+  var words = ["that's enough to keep the", "US population hydrated", "for two days"]
+  
+  for (i=0; i<3; i++) {
+	  svg.append("text")
+	  .text(words[i])
+	  .attr("x", 350)
+	  .attr("y", 850 + 30*i)
+	  .attr("text-anchor", "middle")
+	  .style("font-size", "30px")
+	  .style("font-weight", "bold");
+  }
+  
+  svg.append("text")
+  .text("41 billion may seem like a lot")
+  .attr("x", 850)
+  .attr("y", 930)
+  .attr("text-anchor", "middle")
+  .style("font-size", "30px");
+  
+  svg.append("text")
+  .text("yet the US consumes x times that in a single day")
+  .attr("x", 850)
+  .attr("y", 960)
+  .attr("text-anchor", "middle")
+  .style("font-size", "30px")
+  
+  svg.append("text")
+  .text("...where is it going?")
+  .attr("x", 850)
+  .attr("y", 990)
+  .attr("text-anchor", "middle")
+  .style("font-size", "30px")
+  
+  var images = ["aq.svg", "do.svg", "in.svg",
+   "ir.svg", "li.svg", "mi.svg", "ps.svg", "pt.svg"]
+  
+  for (i=0; i<8; i++) {
+	  svg.append("image")
+	  .attr("href", images[i])
+	  .attr("x", 600 + 70*i)
+	  .attr("y", 1200)
+	  .attr("height", 50)
+	  .attr("width", 50);
+  }
+  
+  
+  // //average drinking per day image text creation
+ //  for (i=0; i<3; i++) {
+ // 	  svg.append("image")
+ // 	  .attr("href", "water.svg")
+ // 	  .attr("x", 150 + 50*i)
+ // 	  .attr("y", topOfIntro)
+ // 	  .attr("width", 100)
+ // 	  .attr("height", 100);
+ //  }
+ //
+ //  svg.append("text")
+ //  .text("water the average college student drinks per day")
+ //  .attr("x", 250)
+ //  .attr("y", topOfIntro+130)
+ //  .attr("text-anchor", "middle")
+ //  .style("font-size", "20px")
+ //  .attr();
+ //
+ //  svg.append("rect")
+ //  .attr("x", 294)
+ //  .attr("y", topOfIntro)
+ //  .attr("width", 24)
+ //  .attr("height", 100)
+ //  .attr("fill", "white");
+ //  //end
+ //
+ //  //creating an array of water bottles
+ //  for (i=0; i<30; i++){
+ // 	  for(j=0; j<22; j++) {
+ // 		  svg.append("image")
+ // 		  .attr("href", "water.svg")
+ // 		  .attr("x", 570 + i*18)
+ // 		  .attr("y", topOfIntro + j*25 - 20)
+ // 		  .attr("width", 18)
+ // 		  .attr("height", 50);
+ // 	  }
+ //  }
+ //  //end
+ //
+ //  //creating label for array of water bottles
+ //  var avgWaterUseWords = ["water the average", "college student", "uses per day"]
+ //
+ //  for (i=0; i<3; i++) {
+ // 	  svg.append("text")
+ // 	  .text(avgWaterUseWords[i])
+ // 	  .attr("x", 840)
+ // 	  .attr("y", topOfIntro+220+30*i)
+ // 	  .attr("text-anchor", "middle")
+ // 	  .style("font-size", "30px")
+ // 	  .style("font-weight", "bold");
+ //  }
+  //end
+  </script>
+  </body>
+  </html>
