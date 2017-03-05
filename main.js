@@ -5,9 +5,10 @@ function visualize(usData, nyData, statePercents){
   var svg = d3.select("svg");
 
   var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
-  var statesplit = new StateStream(500, statePercents, 32, 3000, 11, 300, topOfSpout+4500);
+  var statesplit = new StateStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
+  nyData = nyData.sort((a, b) => b.percent > a.percent);
+  var nysplit = new StateStream(500, nyData, 2, 2000, 50, 300, topOfSpout+6749);
   var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1500, 120, 500);
-
 
   var defs = svg.append("defs");
 
@@ -85,7 +86,6 @@ function visualize(usData, nyData, statePercents){
   .attr("fill", vertGrad("grad-top", ["hsl(225, 90%, 61%)", "hsl(235, 90%, 61%)"]));
 
 
-
   svg.append("path")
   .attr("d", sectorstream.path)
   .attr("class", "chord")
@@ -143,14 +143,14 @@ function visualize(usData, nyData, statePercents){
   // .attr("fill", vertGrad("grad-nytop", ["hsl(240, 100%, 44%)", "hsl(240, 100%, 44%)", "hsl(235, 90%, 61%)"]));
 
   svg.append("path")
-  .attr("d", statesplit.path_fade)
-  .attr("class", "chord")
-  .attr("fill", "url(#circfadeout)");
-
-  svg.append("path")
   .attr("d", statesplit.path_out)
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-nytop", ["hsl(240, 100%, 44%)", "hsl(230, 90%, 61%)"]));
+
+  svg.append("path")
+  .attr("d", statesplit.path_fade)
+  .attr("class", "chord")
+  .attr("fill", "url(#statesfadeout)");
 
   svg.selectAll("g.states")
   .data(statesplit.text)
@@ -162,6 +162,31 @@ function visualize(usData, nyData, statePercents){
   .attr("transform", (t) => "rotate(70, " + t.x + ", " + t.y + ")")
   .attr("x", (t) => t.x)
   .attr("y", (t) => t.y)
+
+
+  svg.append("path")
+  .attr("d", nysplit.path_out)
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-ny", ["hsl(230, 90%, 61%)", "hsl(240, 100%, 44%)"]));
+
+  svg.append("path")
+  .attr("d", nysplit.path_fade)
+  .attr("class", "chord")
+  .attr("fill", "url(#nyfadeout)");
+
+
+
+  sectors
+
+  svg.selectAll("g.ny-industries")
+  .data(nysplit.text)
+  .enter()
+  .append("image")
+  .attr("href", (d) => "img/" + d.id + ".svg")
+  .attr("height", "60px")
+  .attr("width", "60px")
+  .attr("x", (t) => t.x - 30)
+  .attr("y", (t) => t.y - 30);
 
   addTap(svg);
 }
