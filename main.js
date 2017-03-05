@@ -112,11 +112,25 @@ function visualize(usData, nyData, statePercents){
   // .attr("y", (t) => t.y);
 
   sectors.append("image")
-  .attr("href", (d) => "img/" + d.name + ".svg")
+  .attr("href", (d) => "img/" + d.id + ".svg")
   .attr("height", "60px")
   .attr("width", "60px")
   .attr("x", (t) => t.x - 30)
   .attr("y", (t, i) => t.y + 45 - 90 * (i % 2));
+
+  sectors.append("image")
+  .attr("href", (d) => "img/" + d.id + ".svg")
+  .attr("height", "60px")
+  .attr("width", "60px")
+  .attr("x", (t) => 930)
+  .attr("y", (t, i) => t.y - 4 * 80 + 80 * i);
+
+  sectors.append("text")
+  .text((d) => d.name)
+  .attr("height", "60px")
+  .attr("width", "60px")
+  .attr("x", (t) => 1000)
+  .attr("y", (t, i) => t.y - 4 * 80 + 80 * i + 30);
 
   // svg.append("path")
   // .attr("d", nysplit.path_fade)
@@ -143,14 +157,43 @@ function visualize(usData, nyData, statePercents){
   .enter()
   .append("text")
   .text((d) => d.name)
-  .attr("text-anchor", "middle")
+  .attr("text-anchor", "beginning")
+  .attr("dominant-baseline", "middle")
+  .attr("transform", (t) => "rotate(70, " + t.x + ", " + t.y + ")")
   .attr("x", (t) => t.x)
   .attr("y", (t) => t.y)
 
+  addTap(svg);
+}
+
+function addTap(svg){
   svg.append("image")
   .attr("href", "tap.svg")
   .attr("x", "430")
   .attr("y", topOfSpout)
   .attr("height", "800px")
-  .attr("width", "800px")
+  .attr("width", "800px");
+
+  svg.append("clipPath")
+  .attr("id", "leftclip")
+  .append("rect")
+  .attr("x", 740)
+  .attr("y",  topOfSpout + 230)
+  .attr("height", "300px")
+  .attr("width", "148px");
+
+  svg.append("image")
+  .attr("href", "img/us-map-dark.svg")
+  .attr("x", 740)
+  .attr("y", topOfSpout + 230)
+  .attr("height", "300px")
+  .attr("width", "300px");
+
+  svg.append("image")
+  .attr("href", "img/us-map-bright.svg")
+  .attr("x", 740)
+  .attr("y", topOfSpout + 230)
+  .attr("clip-path", "url(#leftclip)")
+  .attr("height", "300px")
+  .attr("width", "300px");
 }
