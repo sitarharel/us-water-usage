@@ -1,8 +1,10 @@
-var topOfIntro = 50;
-var topOfSpout = topOfIntro+600;
+var topOfIntro = 60;
+var topOfSpout = topOfIntro+50;
+var topOfWaterUsage = topOfSpout + 580;
 
 function visualize(usData, nyData, statePercents){
   var svg = d3.select("svg");
+
 
   var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
   var statesplit = new StateStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
@@ -26,59 +28,81 @@ function visualize(usData, nyData, statePercents){
     }
     return "url(#" + grad.attr("id") + ")";
   }
+  
+  //creating title text 
+  var titleWords = ["USA", "Daily Water", "Consumption"]
+  for (i=0; i<3; i++) {
+	  svg.append("text")
+	  .text(titleWords[i])
+	  .attr("x", 50)
+	  .attr("y", topOfIntro + 50 + 90*i)
+	  .style("font-size", "80px")
+	  .style("fill", "#2f2e33");
+  }
+  //end
+  
+  //title image
+  svg.append("image")
+  .attr("href", "manDrinking.svg")
+  .attr("x", 70)
+  .attr("y", topOfIntro+280)
+  .attr("height", 310)
+  .attr("width", 310);
+  //
+  
 
   //average drinking per day image text creation
   for (i=0; i<3; i++) {
 	  svg.append("image")
 	  .attr("href", "water.svg")
-	  .attr("x", 150 + 50*i)
-	  .attr("y", topOfIntro)
+	  .attr("x", 100 + 50*i)
+	  .attr("y", topOfWaterUsage+190)
 	  .attr("width", 100)
 	  .attr("height", 100);
   }
-  
+
   svg.append("text")
   .text("water the average college student drinks per day")
-  .attr("x", 250)
-  .attr("y", topOfIntro+130)
+  .attr("x", 230)
+  .attr("y", topOfWaterUsage+170)
   .attr("text-anchor", "middle")
   .style("font-size", "20px")
   .attr();
-  
+
   svg.append("rect")
-  .attr("x", 294)
-  .attr("y", topOfIntro)
+  .attr("x", 244)
+  .attr("y", topOfWaterUsage+190)
   .attr("width", 24)
   .attr("height", 100)
   .attr("fill", "white");
   //end
-  
+
   //creating an array of water bottles
   for (i=0; i<30; i++){
-	  for(j=0; j<22; j++) {
+	  for(j=0; j<17; j++) {
 		  svg.append("image")
 		  .attr("href", "water.svg")
-		  .attr("x", 570 + i*18)
-		  .attr("y", topOfIntro + j*25 - 20)
+		  .attr("x", 750 + i*13)
+		  .attr("y", topOfWaterUsage + j*25 -30)
 		  .attr("width", 18)
 		  .attr("height", 50);
 	  }
   }
   //end
-  
+
   //creating label for array of water bottles
   var avgWaterUseWords = ["water the average", "college student", "uses per day"]
-  
+
   for (i=0; i<3; i++) {
 	  svg.append("text")
 	  .text(avgWaterUseWords[i])
-	  .attr("x", 840)
-	  .attr("y", topOfIntro+220+30*i)
+	  .attr("x", 950)
+	  .attr("y", topOfWaterUsage+170+30*i)
 	  .attr("text-anchor", "middle")
 	  .style("font-size", "30px")
 	  .style("font-weight", "bold");
   }
-  //
+  //end
   
   svg.append("path")
   .attr("d", topstream.path())
@@ -161,7 +185,7 @@ function visualize(usData, nyData, statePercents){
   .attr("dominant-baseline", "middle")
   .attr("transform", (t) => "rotate(70, " + t.x + ", " + t.y + ")")
   .attr("x", (t) => t.x)
-  .attr("y", (t) => t.y)
+  .attr("y", (t) => t.y);
 
 
   svg.append("path")
@@ -184,6 +208,19 @@ function visualize(usData, nyData, statePercents){
   .attr("x", (t) => t.x - 30)
   .attr("y", (t) => t.y - 30);
 
+  var niagraFalls = new Chord(402, topOfWaterUsage+760, 300, 1800, 98, 20);
+  
+    // svg.append("path")
+  //   .attr("d", "M220 1400 L400 1450")
+  //   .attr("fill", "black")
+  //   .attr("stroke", "black")
+  //   .attr("stroke-width", 3);
+  
+  svg.append("path")
+  .attr("d", niagraFalls.path())
+  .attr("class", "chord")
+  .attr("fill", "black");
+
   addTap(svg);
 }
 
@@ -194,6 +231,29 @@ function addTap(svg){
   .attr("y", topOfSpout)
   .attr("height", "800px")
   .attr("width", "800px");
+  
+  //niagra falls factoid
+  svg.append("image")
+  .attr("href", "waterfall.svg")
+  .attr("x", 50)
+  .attr("y", topOfWaterUsage+600)
+  .attr("height", 220)
+  .attr("widht", 220);
+  
+  svg.append("text")
+  .text("Niagra Falls")
+  .attr("x", 88)
+  .attr("y", topOfWaterUsage+590)
+  .style("font-size", "30px");
+  
+  svg.append("circle")
+  .attr("cx", 220)
+  .attr("cy", 710 + topOfWaterUsage)
+  .attr("r", 7)
+  .attr("fill", "none")
+  .attr("stroke", "hsl(235, 90%, 61%)")
+  .attr("stroke-width", "2");
+
 
   svg.append("clipPath")
   .attr("id", "leftclip")
