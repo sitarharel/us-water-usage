@@ -1,9 +1,17 @@
+var topOfIntro = 50;
+var topOfSpout = topOfIntro+600;
+
 function visualize(usData, stateData, statePercents){
   var svg = d3.select("svg");
  
   var tempStates = Object.keys(statePercents).map((x) => {return {name: x, percent: statePercents[x]}});
   tempStates.sort((a, b) => b.percent - a.percent);
 
+<<<<<<< HEAD
+  var sectorstream = mergeStream(500, tempSectors, 3000, 30, 300, topOfSpout+1500);
+  var statesplit = new StateStream(500, tempStates, 32, 3000, 11, 300, topOfSpout+4500);
+  var topstream = new Chord(500, topOfSpout+500, 320, topOfSpout+1500, 120, 500);
+=======
   var sectorstream = mergeStream(500, usData, 3000, 30, 300, 1500);
   var statesplit = StateStream(500, statePercents, 9, 3000, 10, 300, 4500);
   // var nysplit = new StateStream(500, rand_data(10, 500), 5, 3000, 30, 300, 7500);
@@ -26,7 +34,61 @@ function visualize(usData, stateData, statePercents){
     }
     return "url(#" + grad.attr("id") + ")";
   }
+>>>>>>> 6d4feab40902099bd162a5d73eebb86f3202dc32
 
+  //average drinking per day image text creation
+  for (i=0; i<3; i++) {
+	  svg.append("image")
+	  .attr("href", "water.svg")
+	  .attr("x", 150 + 50*i)
+	  .attr("y", topOfIntro)
+	  .attr("width", 100)
+	  .attr("height", 100);
+  }
+  
+  svg.append("text")
+  .text("water the average college student drinks per day")
+  .attr("x", 250)
+  .attr("y", topOfIntro+130)
+  .attr("text-anchor", "middle")
+  .style("font-size", "20px")
+  .attr();
+  
+  svg.append("rect")
+  .attr("x", 294)
+  .attr("y", topOfIntro)
+  .attr("width", 24)
+  .attr("height", 100)
+  .attr("fill", "white");
+  //end
+  
+  //creating an array of water bottles
+  for (i=0; i<30; i++){
+	  for(j=0; j<22; j++) {
+		  svg.append("image")
+		  .attr("href", "water.svg")
+		  .attr("x", 570 + i*18)
+		  .attr("y", topOfIntro + j*25 - 20)
+		  .attr("width", 18)
+		  .attr("height", 50);
+	  }
+  }
+  //end
+  
+  //creating label for array of water bottles
+  var avgWaterUseWords = ["water the average", "college student", "uses per day"]
+  
+  for (i=0; i<3; i++) {
+	  svg.append("text")
+	  .text(avgWaterUseWords[i])
+	  .attr("x", 840)
+	  .attr("y", topOfIntro+220+30*i)
+	  .attr("text-anchor", "middle")
+	  .style("font-size", "30px")
+	  .style("font-weight", "bold");
+  }
+  //
+  
   svg.append("path")
   .attr("d", topstream.path())
   .attr("class", "chord")
@@ -98,7 +160,7 @@ function visualize(usData, stateData, statePercents){
   svg.append("image")
   .attr("href", "tap.svg")
   .attr("x", "430")
-  .attr("y", "0")
+  .attr("y", topOfSpout)
   .attr("height", "800px")
   .attr("width", "800px")
 }
