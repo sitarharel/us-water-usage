@@ -32,10 +32,23 @@ function visualize(usData, stateData, statePercents){
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-top", ["hsl(225, 90%, 61%)", "hsl(235, 90%, 61%)"]));
 
+
+
   svg.append("path")
   .attr("d", sectorstream.path)
   .attr("class", "chord")
+  // .attr("stroke", "black")
   .attr("fill", vertGrad("grad-sector", ["hsl(235, 90%, 61%)", "hsl(240, 100%, 44%)"]));
+
+  // svg.append("path")
+  // .attr("d", sectorstream.path)
+  // .attr("class", "chord")
+  // .attr("fill", "url(#water-pattern)");
+
+  // svg.append("path")
+  // .attr("d", topstream.path())
+  // .attr("class", "chord")
+  // .attr("fill", "url(#water-pattern)");
 
   var sectors = svg.selectAll("g.us_sector")
   .data(sectorstream.text)
@@ -51,7 +64,7 @@ function visualize(usData, stateData, statePercents){
   .attr("height", "60px")
   .attr("width", "60px")
   .attr("x", (t) => t.x - 30)
-  .attr("y", (t, i) => t.y - 100 + 130 * (i % 2));
+  .attr("y", (t, i) => t.y - 30);
 
   // svg.append("path")
   // .attr("d", nysplit.path_fade)
