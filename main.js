@@ -174,10 +174,6 @@ function visualize(usData, nyData, statePercents){
   .attr("class", "chord")
   .attr("fill", "url(#nyfadeout)");
 
-
-
-  sectors
-
   svg.selectAll("g.ny-industries")
   .data(nysplit.text)
   .enter()
