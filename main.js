@@ -1,22 +1,13 @@
 var topOfIntro = 50;
 var topOfSpout = topOfIntro+600;
 
-function visualize(usData, stateData, statePercents){
+function visualize(usData, nyData, statePercents){
   var svg = d3.select("svg");
- 
-  var tempStates = Object.keys(statePercents).map((x) => {return {name: x, percent: statePercents[x]}});
-  tempStates.sort((a, b) => b.percent - a.percent);
 
-<<<<<<< HEAD
-  var sectorstream = mergeStream(500, tempSectors, 3000, 30, 300, topOfSpout+1500);
-  var statesplit = new StateStream(500, tempStates, 32, 3000, 11, 300, topOfSpout+4500);
-  var topstream = new Chord(500, topOfSpout+500, 320, topOfSpout+1500, 120, 500);
-=======
-  var sectorstream = mergeStream(500, usData, 3000, 30, 300, 1500);
-  var statesplit = StateStream(500, statePercents, 9, 3000, 10, 300, 4500);
-  // var nysplit = new StateStream(500, rand_data(10, 500), 5, 3000, 30, 300, 7500);
-  var topstream = new Chord(500, 500, 300, 1500, 120, 500);
-  // console.log(statesplit);
+  var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
+  var statesplit = new StateStream(500, statePercents, 32, 3000, 11, 300, topOfSpout+4500);
+  var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1500, 120, 500);
+
 
   var defs = svg.append("defs");
 
@@ -34,7 +25,6 @@ function visualize(usData, stateData, statePercents){
     }
     return "url(#" + grad.attr("id") + ")";
   }
->>>>>>> 6d4feab40902099bd162a5d73eebb86f3202dc32
 
   //average drinking per day image text creation
   for (i=0; i<3; i++) {
@@ -126,7 +116,7 @@ function visualize(usData, stateData, statePercents){
   .attr("height", "60px")
   .attr("width", "60px")
   .attr("x", (t) => t.x - 30)
-  .attr("y", (t, i) => t.y - 30);
+  .attr("y", (t, i) => t.y + 45 - 90 * (i % 2));
 
   // svg.append("path")
   // .attr("d", nysplit.path_fade)

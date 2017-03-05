@@ -115,7 +115,8 @@ function mergeStream(width, splits, height, stream_margin, x_offset, y_offset){
   var result = {path: "", text: []};
   for(var i = 0; i < splits.length; i++){
     var val = splits[i].percent*width;
-    result.text.push({name: splits[i].id, x: xb + val/2, y: y_offset + height/2 - 100 + (xb + val/2)*0.4, val: val});
+    // - 100 + (xb + val/2)*0.4
+    result.text.push({name: splits[i].id, x: xb + val/2, y: y_offset + height/2, val: val});
     chords.push(new Chord(xt, y_offset + height/16, xb, y_offset + height/2, val));
     chords.push(new Chord(xb, y_offset + height/2, xt, y_offset + height * 15/16, val));
     xt += val;

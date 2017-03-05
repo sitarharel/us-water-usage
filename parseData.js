@@ -81,7 +81,7 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
                            "percent": parseFloat(d.values["to-wtotl"])/usTotal });
     })
     statePercents.sort( (a, b)  => { return (b["percent"] - a["percent"]); });
-    visualize(usData, stateData, statePercents);
+    visualize(usData, nyData, statePercents);
   });
 
 });
