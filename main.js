@@ -269,20 +269,25 @@ function visualize(usData, nyData, statePercents){
   .attr("x", 78)
   .attr("y", topOfWaterUsage+590-100)
   .style("font-size", "30px");
-
-  // svg.append("circle")
-//   .attr("cx", 220)
-//   .attr("cy", 710 + topOfWaterUsage)
-//   .attr("r", 7)
-//   .attr("fill", "none")
-//   .attr("stroke", "hsl(235, 90%, 61%)")
-//   .attr("stroke-width", "2");
   
-  //   // svg.append("path")
-  // //   .attr("d", "M220 1400 L400 1450")
-  // //   .attr("fill", "black")
-  // //   .attr("stroke", "black")
-  // //   .attr("stroke-width", 3);
+  //new york state label
+  svg.append("image")
+  .attr("href", "NY.svg")
+  .attr("x", 360)
+  .attr("y", 6550)
+  .attr("height", 220)
+  .attr("widht", 220)
+  atttr("fill", "white");
+  
+  // var titleWords = ["New", "York"]
+//   for (i=0; i<2; i++) {
+// 	  svg.append("text")
+// 	  .text(titleWords[i])
+// 	  .attr("x", 400)
+// 	  .attr("y", 6600 + i*80)
+// 	  .style("font-size", "80px")
+// 	  .style("fill", "#2f2e33");
+//   }
 
   addTap(svg);
 }
