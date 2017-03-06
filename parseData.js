@@ -71,7 +71,7 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
   });
 
   usTotal = parseFloat(usData["to-wtotl"]);
-  nyData = calcPercent(stateData[32].values);
+  nyData = calcPercent(stateData[32].values).sort((a, b) => b.percent > a.percent);
   usData = calcPercent(usData);
 
   d3.json("states_hash.json", function(stateDict) {

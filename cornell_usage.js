@@ -11,7 +11,7 @@ var arts = [{"name": "Goldwin Smith", "value": 999}, {"name": "White", "value": 
 
 var library = [{"name": "Olin", "value": 9313}, {"name": "Uris", "value": 5610},
 			   {"name": "Mann", "value": 7224}, {"name": "Kroch", "value": 1514},
-			   {"name": "Total", 5914}]; 
+			   {"name": "Total", "value": 5914}]; 
 
 var cornell = [{"name": "Arts Quad", "value": 8422}, {"name": "Engineering Quad", "value": 36991},
 			   {"name": "Libraries", "value": 5914}]

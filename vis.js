@@ -13,6 +13,14 @@ function arraySum(arr){
     return res.map((x) => {return {name: "", percent: scale * x}});
   }
 
+function scaleLine(x, y, length, side_height){
+  side_height = side_height || 50;
+  var res = {};
+  res.d = "M " + x + " " + (y - side_height/2) + " L " + x + " " + (y + side_height/2)
+   + " " + x + " " + y + " " + (x + length) + " " + y + " " + (x + length) + " " + 
+   (y - side_height/2) + " " + (x + length) + " " + (y + side_height/2);
+  return res;
+}
 
 function randomizePath(path_d, texture, randomness){
   // if you input an svg d attribute, it will output it with random texture.
@@ -150,7 +158,7 @@ function StateStream(width, states, res_index, height, stream_margin, x_offset, 
       var y_squish_fac = Math.cos(( xb + states[i].size/2 - x_offset - width/2)/mid_width);
       var x_squish_fac = 1 - Math.cos(( xb + states[i].size/2 - x_offset - width/2)/mid_width);
       if(xb > x_offset + width/2) x_squish_fac *= -1;
-      var text = {name: states[i].name, x: xb + states[i].size/2 + 90*x_squish_fac, y: y_offset + height/2 - (height/2 + 50) + (height/2) * y_squish_fac};
+      var text = {name: states[i].name, x: xb + states[i].size/2 + 80*x_squish_fac, y: y_offset + height/2 - (height/2 + 50) + (height/2) * y_squish_fac};
       if(states[i].id) text.id = states[i].id;
       result.text.push(text);
       chords.push(new Chord(xt, y_offset, xb, y_offset + height/2 , states[i].size));
