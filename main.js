@@ -275,9 +275,7 @@ function visualize(usData, nyData, statePercents){
   .attr("href", "NY.svg")
   .attr("x", 360)
   .attr("y", 6550)
-  .attr("height", 220)
-  .attr("widht", 220)
-  atttr("fill", "white");
+  .attr("height", 220);
   
   // var titleWords = ["New", "York"]
 //   for (i=0; i<2; i++) {
