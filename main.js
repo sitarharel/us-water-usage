@@ -30,7 +30,7 @@ function visualize(usData, nyData, statePercents){
   }
   
   //creating title text 
-  var titleWords = ["USA", "Daily Water", "Consumption"]
+  var titleWords = ["United States", "Daily Water", "Consumption"]
   for (i=0; i<3; i++) {
 	  svg.append("text")
 	  .text(titleWords[i])
@@ -146,14 +146,14 @@ function visualize(usData, nyData, statePercents){
   .attr("href", (d) => "img/" + d.id + ".svg")
   .attr("height", "60px")
   .attr("width", "60px")
-  .attr("x", (t) => 930)
+  .attr("x", (t) => 970)
   .attr("y", (t, i) => t.y - 4 * 80 + 80 * i);
 
   sectors.append("text")
   .text((d) => d.name)
   .attr("height", "60px")
   .attr("width", "60px")
-  .attr("x", (t) => 1000)
+  .attr("x", (t) => 1040)
   .attr("y", (t, i) => t.y - 4 * 80 + 80 * i + 30);
 
   // svg.append("path")
@@ -219,7 +219,7 @@ function visualize(usData, nyData, statePercents){
   svg.append("path")
   .attr("d", niagraFalls.path())
   .attr("class", "chord")
-  .attr("fill", "black");
+  .attr("fill", "blue");
 
   addTap(svg);
 }
