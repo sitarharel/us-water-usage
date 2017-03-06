@@ -13,13 +13,15 @@ function arraySum(arr){
     return res.map((x) => {return {name: "", percent: scale * x}});
   }
 
-function scaleLine(x, y, length, side_height){
+function scaleLine(x, y, length, side_height, top){
   side_height = side_height || 50;
   var res = {};
   res.d = "M " + x + " " + (y - side_height/2) + " L " + x + " " + (y + side_height/2)
    + " " + x + " " + y + " " + (x + length) + " " + y + " " + (x + length) + " " + 
    (y - side_height/2) + " " + (x + length) + " " + (y + side_height/2);
-  return res;
+   if(top) res.d = "M " + x + " " + (y - side_height) + " L " + x + " " + y + " " +
+           (x + length) + " " + y + " " + (x + length) + " " + (y - side_height);
+   return res;
 }
 
 function randomizePath(path_d, texture, randomness){

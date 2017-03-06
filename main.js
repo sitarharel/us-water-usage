@@ -1,6 +1,7 @@
 var topOfIntro = 60;
 var topOfSpout = topOfIntro+50;
 var topOfWaterUsage = topOfSpout + 580;
+var moveCollegeDown = 8100;
 
 function visualize(usData, nyData, statePercents){
   var svg = d3.select("svg");
@@ -10,7 +11,7 @@ function visualize(usData, nyData, statePercents){
   var statesplit = new StateStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
 
   var nysplit = new StateStream(500, nyData, 2, 2000, 55, 300, topOfSpout+6749);
-  var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1500, 120, 500);
+  var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1502, 120, 500);
 
   var cornell = new Chord(500, topOfSpout + 8249, 300, topOfSpout + 10000, 0.885, 500); 
 
@@ -52,13 +53,12 @@ function visualize(usData, nyData, statePercents){
   .attr("width", 310);
   //
   
-
   //average drinking per day image text creation
   for (i=0; i<3; i++) {
 	  svg.append("image")
 	  .attr("href", "water.svg")
 	  .attr("x", 100 + 50*i)
-	  .attr("y", topOfWaterUsage+190)
+	  .attr("y", topOfWaterUsage+190+moveCollegeDown)
 	  .attr("width", 100)
 	  .attr("height", 100);
   }
@@ -66,14 +66,14 @@ function visualize(usData, nyData, statePercents){
   svg.append("text")
   .text("water the average college student drinks per day")
   .attr("x", 230)
-  .attr("y", topOfWaterUsage+170)
+  .attr("y", topOfWaterUsage+170+moveCollegeDown)
   .attr("text-anchor", "middle")
   .style("font-size", "20px")
   .attr();
 
   svg.append("rect")
   .attr("x", 244)
-  .attr("y", topOfWaterUsage+190)
+  .attr("y", topOfWaterUsage+190+moveCollegeDown)
   .attr("width", 24)
   .attr("height", 100)
   .attr("fill", "white");
@@ -85,7 +85,7 @@ function visualize(usData, nyData, statePercents){
 		  svg.append("image")
 		  .attr("href", "water.svg")
 		  .attr("x", 750 + i*13)
-		  .attr("y", topOfWaterUsage + j*25 -30)
+		  .attr("y", topOfWaterUsage + j*25 -30+moveCollegeDown)
 		  .attr("width", 18)
 		  .attr("height", 50);
 	  }
@@ -99,7 +99,7 @@ function visualize(usData, nyData, statePercents){
 	  svg.append("text")
 	  .text(avgWaterUseWords[i])
 	  .attr("x", 950)
-	  .attr("y", topOfWaterUsage+170+30*i)
+	  .attr("y", topOfWaterUsage+170+30*i+moveCollegeDown)
 	  .attr("text-anchor", "middle")
 	  .style("font-size", "30px")
 	  .style("font-weight", "bold");
@@ -229,41 +229,60 @@ function visualize(usData, nyData, statePercents){
   .attr("x", (t) => t.x - 30)
   .attr("y", (t) => t.y - 30);
 
-  // var niagraFalls = new Chord(402, topOfWaterUsage+760, 300, 1800, 98, 20);
+
+  var niagraFalls = new Chord(120, topOfWaterUsage+735-100, 200, topOfSpout + 1500, 20, 57.75);
+
+  //niagra falls factoid
+
+  svg.append("image")
+  .attr("href", "waterfall.svg")
+  .attr("x", 40)
+  .attr("y", topOfWaterUsage+600-100)
+  .attr("height", 220)
+  .attr("widht", 220);
+  
+  svg.append("path")
+  .attr("d", niagraFalls.path())
+  .attr("class", "chord")
+  .attr("fill", "#b3f4ef");
+
+  svg.append("path")  
+  .attr("d", (new Chord(200, topOfSpout + 1500, 200, topOfSpout + 1600, 57.75)).path())
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-niagra", ["#b3f4ef", "#ffffff"]));
+
+  svg.append("path")
+  .attr("d", scaleLine(200, topOfSpout + 1500, 57.75, 30).d)
+  .style("fill", "none")
+  .style("stroke", "black")
+  .style("stroke-width", "3");
+  
+  svg.append("text")
+  .text("41 Billion gpd")
+  .attr("x", 200 + 57.75/2)
+  .attr("text-anchor", "middle")
+  .attr("y", topOfSpout + 1535)
+  .style("font-size", "14px");
+  
+  svg.append("text")
+  .text("Niagra Falls")
+  .attr("x", 78)
+  .attr("y", topOfWaterUsage+590-100)
+  .style("font-size", "30px");
+
+  // svg.append("circle")
+//   .attr("cx", 220)
+//   .attr("cy", 710 + topOfWaterUsage)
+//   .attr("r", 7)
+//   .attr("fill", "none")
+//   .attr("stroke", "hsl(235, 90%, 61%)")
+//   .attr("stroke-width", "2");
   
   //   // svg.append("path")
   // //   .attr("d", "M220 1400 L400 1450")
   // //   .attr("fill", "black")
   // //   .attr("stroke", "black")
   // //   .attr("stroke-width", 3);
-  
-  // svg.append("path")
-  // .attr("d", niagraFalls.path())
-  // .attr("class", "chord")
-  // .attr("fill", "blue");
-
- // svg.append("image")
- //  .attr("href", "waterfall.svg")
- //  .attr("x", 50)
- //  .attr("y", topOfWaterUsage+600)
- //  .attr("height", 220)
- //  .attr("widht", 220);
-  
- //  svg.append("text")
- //  .text("Niagra Falls")
- //  .attr("x", 88)
- //  .attr("y", topOfWaterUsage+590)
- //  .style("font-size", "30px");
-
-  // svg.append("circle")
-  // .attr("cx", 220)
-  // .attr("cy", 710 + topOfWaterUsage)
-  // .attr("r", 7)
-  // .attr("fill", "none")
-  // .attr("stroke", "hsl(235, 90%, 61%)")
-  // .attr("stroke-width", "2");
-
-
 
   addTap(svg);
 }
@@ -275,10 +294,6 @@ function addTap(svg){
   .attr("y", topOfSpout)
   .attr("height", "800px")
   .attr("width", "800px");
-  
-  //niagra falls factoid
- 
-  
 
   svg.append("clipPath")
   .attr("id", "leftclip")
