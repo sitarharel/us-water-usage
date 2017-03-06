@@ -230,6 +230,25 @@ function visualize(usData, nyData, statePercents){
   .attr("y", topOfWaterUsage+590-100)
   .style("font-size", "30px");
   
+  //new york state label
+  svg.append("image")
+  .attr("href", "NY.svg")
+  .attr("x", 360)
+  .attr("y", 6550)
+  .attr("height", 220)
+  .attr("widht", 220)
+  atttr("fill", "white");
+  
+  // var titleWords = ["New", "York"]
+//   for (i=0; i<2; i++) {
+// 	  svg.append("text")
+// 	  .text(titleWords[i])
+// 	  .attr("x", 400)
+// 	  .attr("y", 6600 + i*80)
+// 	  .style("font-size", "80px")
+// 	  .style("fill", "#2f2e33");
+//   }
+  
   // svg.append("circle")
 //   .attr("cx", 220)
 //   .attr("cy", 710 + topOfWaterUsage)
