@@ -16,6 +16,11 @@ var library = [{"name": "Olin", "value": 9313}, {"name": "Uris", "value": 5610},
 var cornell = [{"name": "Arts Quad", "value": 8422}, {"name": "Engineering Quad", "value": 36991},
 			   {"name": "Libraries", "value": 5914}];
 
+var sectorDict = { "ps": "Public Supply", "do": "Domestic", "in": "Industrial",
+                   "ir": "Irrigation", "li": "Livestock", "aq": "Aquaculture",
+                   "mi": "Mining", "pt": "Power", "to": "Total" };
+
+// http://www.dec.ny.gov/about/50230.html
 var ny_countytoregion = {
 	"Chautauqua": "Western New York",
 	"Erie": "Western New York",

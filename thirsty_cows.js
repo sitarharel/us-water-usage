@@ -1,24 +1,20 @@
+//http://waterfootprint.org/en/water-footprint/product-water-footprint/water-footprint-crop-and-animal-products/
+
 var graphSize = 330;
 var graphY = topOfSpout + 4200;
 var graphX = 840;
+var barWidth = 45;
 
 var waterKG = [{"name": "Vegetables", "value": 85}, {"name": "Fruits", "value": 254},
 			   {"name": "Chicken", "value": 1142}, {"name": "Nuts", "value": 2394},  
 			   {"name": "Beef", "value": 4072}];
-
-var svg = d3.select("svg");
-
-var padding = 30; 
-var strokeWidth = 45;
 
 var waterScale = d3.scaleLinear().domain([0, 4500]).range([graphY, graphY + 450]);
 var produceScale = d3.scaleLinear().domain([0, waterKG.length]).range([graphX + graphSize, graphX]);
 var colorScale = d3.scaleLinear().domain([0,4200]).range(["#b3f4ef", "#1d20e2"]);
 var colorScale2 = d3.scaleLinear().domain([0,4200]).range(["#5084c1", "#180d9d"]);
 
-
 top = d3.axisTop(produceScale).tickFormat("");
-
 right = d3.axisRight(waterScale).ticks(5, "s");
 
 svg.append("g")
@@ -37,14 +33,14 @@ waterKG.forEach(function (d, i) {
 	.attr("y", waterScale(0)) 
 	.attr("height", waterScale(d.value) - waterScale(0))
 	.style("fill", vertGrad("grad-cows"+i, [colorScale2(d.value), colorScale(d.value), "#ffffff"]))
-	.style("width", strokeWidth);
+	.style("width", barWidth);
 
 	svg.append("image")
   	.attr("href", "img/" + d.name + ".svg")
-  	.attr("height", strokeWidth + 5)
-  	.attr("width", strokeWidth + 5)
+  	.attr("height", barWidth + 5)
+  	.attr("width", barWidth + 5)
   	.attr("x", produceScale(i+1))
-  	.attr("y", graphY - strokeWidth * 1.5);
+  	.attr("y", graphY - barWidth * 1.5);
 
 });
 
