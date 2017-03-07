@@ -361,8 +361,6 @@ function visualize(usData, nyData, statePercents, counties){
     .attr("y", topofcornell - 10 + 30 * i);
   });
 
-var moveCollegeDown = 10100;
-
   //average drinking per day image text creation
   for (i=0; i<3; i++) {
     svg.append("image")
@@ -421,8 +419,6 @@ var moveCollegeDown = 10100;
   //   .style("font-weight", "bold");
   // }
   
-
-
   addTap(svg);
 }
 

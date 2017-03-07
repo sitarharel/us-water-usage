@@ -1,20 +1,4 @@
-
-// [ { "name" : sector_name, "percent": sector percent of US total }, ...]
-var usData = {};
-
-// [ { "name": state_name, "percent": state percent of US total }, ...]
-var statePercents = [];
-
-// [ { "name" : sector_name, "percent": sector percent of NY total }, ...]
-var nyData;
-
-// Total US water usage in millions of gallons per day
-var usTotal; 
-
-var sectorDict = { "ps": "Public Supply", "do": "Domestic", "in": "Industrial",
-                   "ir": "Irrigation", "li": "Livestock", "aq": "Aquaculture",
-                   "mi": "Mining", "pt": "Power", "to": "Total" };
-
+// Extract only state acronym, county name (if state is NY), and major sector usage
 function parseLine (line) {
   var total = /w([A-z]*)totl$/i;
   var result = { "state": line["STATE"]};
@@ -29,6 +13,7 @@ function parseLine (line) {
   return result;
 }
 
+// Given an object with a sector in mgd and total in mgd, convert percent of total
 function calcPercent (obj) {
   var total = parseFloat(obj["to-wtotl"]);
 
@@ -48,10 +33,29 @@ function calcPercent (obj) {
 
 d3.tsv("usco2010.tsv", parseLine, function (error, data) {
 
+  // [ { "id": sector_acronym, "name" : sector_name, 
+  //     "val": Mgal/day, "percent": sector percent of US total }, ...]
+  var usData = {};
+
+  // [ { "id": state_acronym, name": state_name, "percent": state percent of US total }, ...]
+  var statePercents = [];
+
+  // [ { "id": sector_acronym, "name" : sector_name, 
+  //      "val": Mgal/day, "percent": sector percent of NY total }, ...]
+  var nyData;
+
+  // Total US water usage in millions of gallons per day
+  var usTotal; 
+ 
+  // [ { "name" : region_name, "val": Mgal/day, "percent": sector percent of NY PS total }, ...]
+  var regionPSData = [];
 
   var stateData = d3.nest()
   .key(function (d) { return d.state; })
   .entries(data);
+
+  stateData = stateData.filter( (d) => { 
+    return ((d["key"] != "PR") && (d["key"] != "VI") && (d["key"] !="DC")); } );
 
   var countyData = d3.nest()
     .key(function (d) { return d.state; })
@@ -61,6 +65,7 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
     return (d["key"] == "NY");
   });
 
+  // NY county to region aggregate
   countyData = countyData[0]["values"].reduce( function (acc, curr) {
     var county = curr["county"].substring(0, curr["county"].length-7);
     var region = ny_countytoregion[county];
@@ -74,17 +79,14 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
     return acc;
   }, {});
 
-  var counties = [];
   Object.keys(countyData).forEach( function (key) { 
-    counties.push( {"name": key, "val":  parseFloat(countyData[key]), "percent": parseFloat(countyData[key]) / 2263.04});
+    regionPSData.push( {"name": key, "val":  parseFloat(countyData[key]), "percent": parseFloat(countyData[key]) / 2263.04});
   });
-  counties.sort( (a, b)  => { return (b["percent"] - a["percent"]); });
+  regionPSData.sort( (a, b)  => { return (b["percent"] - a["percent"]); });
 
-  stateData = stateData.filter( (d) => { 
-    return ((d["key"] != "PR") && (d["key"] != "VI") && (d["key"] !="DC")); } );
 
+  // County to state and US total aggregate
   stateData.forEach( function (d) {
-    // Collapses county data into state and US totals
     d.values = d.values.reduce( function (acc, curr) {
       Object.keys(curr).forEach( function (key) {  
         if (!(key in usData)) {
@@ -105,6 +107,7 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
   nyData = calcPercent(stateData[32].values).sort((a, b) => b.percent > a.percent);
   usData = calcPercent(usData);
 
+  // Map state acronyms to full names
   d3.json("states_hash.json", function(stateDict) {
     stateData.forEach( function (d) {
       statePercents.push({ "id": d["key"].toUpperCase(),
@@ -112,7 +115,7 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
                            "percent": parseFloat(d.values["to-wtotl"])/usTotal });
     })
     statePercents.sort( (a, b)  => { return (b["percent"] - a["percent"]); });
-    visualize(usData, nyData, statePercents, counties);
+    visualize(usData, nyData, statePercents, regionPSData);
   });
 
 });
