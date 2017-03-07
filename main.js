@@ -1,7 +1,7 @@
 var topOfIntro = 60;
 var topOfSpout = topOfIntro+50;
 var topOfWaterUsage = topOfSpout + 580;
-var moveCollegeDown = 8100;
+var moveCollegeDown = 10100;
 
 function visualize(usData, nyData, statePercents, counties){
   var svg = d3.select("svg");
@@ -292,6 +292,17 @@ console.log(counties);
   // .attr("fill", vertGrad("grad-cornell", ["hsl(240, 100%, 44%)", "hsl(225, 90%, 61%)"]));
  
 
+  // var collegeDrinkStats = new Chord(132, moveCollegeDown+980, 200, moveCollegeDown + 1100, 112, 60)
+//   svg.append("path")
+//   .attr("d", collegeDrinkStats.path())
+//   .attr("class", "chord")
+//   .attr("fill", "#b3f4ef");
+//
+//   var collegeUseStats = new Chord(500, moveCollegeDown+980, 600, moveCollegeDown + 1100, 112, 60)
+//   svg.append("path")
+//   .attr("d", collegeUseStats.path())
+//   .attr("class", "chord")
+//   .attr("fill", "#b3f4ef");
 
 
   var niagraFalls = new Chord(120, topOfWaterUsage+735-100, 200, topOfSpout + 1500, 20, 57.75);
@@ -335,15 +346,13 @@ console.log(counties);
   .style("fill", "#2f2e33")
   .style("font-size", "30px");
   
-  // var titleWords = ["New", "York"]
-//   for (i=0; i<2; i++) {
-// 	  svg.append("text")
-// 	  .text(titleWords[i])
-// 	  .attr("x", 400)
-// 	  .attr("y", 6600 + i*80)
-// 	  .style("font-size", "80px")
-// 	  .style("fill", "#2f2e33");
-//   }
+  svg.append("text")
+  .text("959 Million gpd")
+  .attr("text-anchor", "middle")
+  .attr("font-size", "40")
+  .style("fill", "black")
+  .attr("x", 560)
+  .attr("y", topOfSpout + 8150);
 
   addTap(svg);
 }
