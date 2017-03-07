@@ -13,7 +13,7 @@ var usTotal;
 
 var sectorDict = { "ps": "Public Supply", "do": "Domestic", "in": "Industrial",
                    "ir": "Irrigation", "li": "Livestock", "aq": "Aquaculture",
-                   "mi": "Mining", "pt": "Thermoelectric", "to": "Total" };
+                   "mi": "Mining", "pt": "Power", "to": "Total" };
 
 function parseLine (line) {
   var total = /w([A-z]*)totl$/i;
