@@ -124,18 +124,28 @@ function visualize(usData, nyData, statePercents){
 
   // Annotation for total US width
   svg.append("path")
-  .attr("d", scaleLine(300, (topOfSpout + 1500), 500).d)
+  .attr("d", scaleLine(300, (topOfSpout + 1650), 500).d)
   .style("fill", "none")
   .style("stroke", "black")
   .style("stroke-width", "4");
 
   svg.append("text")
-  .text("Total US Water Usage: 355 Billion Gallons per Day")
+  .text("Total US Water Usage")
   .attr("text-anchor", "middle")
-  .attr("font-size", "20")
+  .attr("font-size", "40")
+  .style("fill", "#2f2e33")
   .attr("x", 550)
-  .attr("y", topOfSpout + 1480);
+  .attr("y", topOfSpout + 1575);
 
+  svg.append("text")
+  .text("355 Billion gpd")
+  .attr("text-anchor", "middle")
+  .attr("font-size", "50")
+  .style("fill", "black")
+  .attr("x", 550)
+  .attr("y", topOfSpout + 1630);
+
+ 
 
   // svg.append("path")
   // .attr("d", sectorstream.path)
@@ -259,15 +269,16 @@ function visualize(usData, nyData, statePercents){
   
   svg.append("text")
   .text("41 Billion gpd")
-  .attr("x", 200 + 57.75/2)
+  .attr("x", 215)
   .attr("text-anchor", "middle")
-  .attr("y", topOfSpout + 1535)
-  .style("font-size", "14px");
+  .attr("y", topOfSpout + 1465)
+  .style("font-size", "24px");
   
   svg.append("text")
   .text("Niagra Falls")
   .attr("x", 78)
   .attr("y", topOfWaterUsage+590-100)
+  .style("fill", "#2f2e33")
   .style("font-size", "30px");
   
   //new york state label

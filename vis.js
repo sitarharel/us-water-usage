@@ -4,14 +4,14 @@ function arraySum(arr){
   }, 0);
 }
 
-  var rand_data = function(num, size) {
-    var res = [];
-    for(var i = 0; i < num; i++){
-      res.push(Math.random());
-    }
-    var scale = size / res.reduce((a, x) => a + x, 0);
-    return res.map((x) => {return {name: "", percent: scale * x}});
+var rand_data = function(num, size) {
+  var res = [];
+  for(var i = 0; i < num; i++){
+    res.push(Math.random());
   }
+  var scale = size / res.reduce((a, x) => a + x, 0);
+  return res.map((x) => {return {name: "", percent: scale * x}});
+}
 
 function scaleLine(x, y, length, side_height, top){
   side_height = side_height || 50;
