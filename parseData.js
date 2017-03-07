@@ -76,10 +76,9 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
 
   var counties = [];
   Object.keys(countyData).forEach( function (key) { 
-    counties.push( {"name": key, "value": parseFloat(countyData[key]) / 2263.04});
+    counties.push( {"name": key, "val":  parseFloat(countyData[key]), "percent": parseFloat(countyData[key]) / 2263.04});
   });
-
-  console.log(counties);
+  counties.sort( (a, b)  => { return (b["percent"] - a["percent"]); });
 
   stateData = stateData.filter( (d) => { 
     return ((d["key"] != "PR") && (d["key"] != "VI") && (d["key"] !="DC")); } );

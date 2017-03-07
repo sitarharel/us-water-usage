@@ -240,28 +240,56 @@ function visualize(usData, nyData, statePercents, counties){
   .attr("y", topOfSpout + 6710);
 
 
-  var topofcornell = topOfSpout + 8249;
-  var cornelltwidth = 0.885;
-  var cornellbwidth = 50;
-  var cornell = new Chord(550 - cornelltwidth/2, topofcornell, 550 - cornellbwidth/2, topofcornell + 700, cornelltwidth, cornellbwidth); 
-  var lnotcornell = new Chord(300, topofcornell, 300 - cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
-  var rnotcornell = new Chord(550 + cornelltwidth/2, topofcornell, 550 + cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
+console.log(counties);
+
+  var topofregion = topOfSpout + 8249;
+  var regionsplit = StateStream(500, counties, 1, 1500, 30, 300, topofregion);
 
   svg.append("path")
-  .attr("d", lnotcornell.path())
+  .attr("d", regionsplit.path_out)
   .attr("class", "chord")
-  .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
- 
-  svg.append("path")
-  .attr("d", rnotcornell.path())
-  .attr("class", "chord")
-  .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
- 
+  .attr("fill", vertGrad("grad-nytop", ["hsl(240, 100%, 44%)", "hsl(230, 90%, 61%)"]));
 
   svg.append("path")
-  .attr("d", cornell.path())
+  .attr("d", regionsplit.path_fade)
   .attr("class", "chord")
-  .attr("fill", vertGrad("grad-cornell", ["hsl(240, 100%, 44%)", "hsl(225, 90%, 61%)"]));
+  .attr("fill", "url(#statesfadeout)");
+  console.log(regionsplit.outval);
+  svg.selectAll("g.states")
+  .data(regionsplit.text)
+  .enter()
+  .append("text")
+  .text((d) => d.name)
+  .attr("text-anchor", "beginning")
+  .attr("font-size", "14")
+  .attr("dominant-baseline", "middle")
+  .attr("transform", (t) => "rotate(80, " + t.x + ", " + t.y + ")")
+  .attr("x", (t) => t.x)
+  .attr("y", (t) => t.y);
+
+
+  // var topofcornell = topOfSpout + 8249;
+  // var cornelltwidth = 0.885;
+  // var cornellbwidth = 50;
+  // var cornell = new Chord(550 - cornelltwidth/2, topofcornell, 550 - cornellbwidth/2, topofcornell + 700, cornelltwidth, cornellbwidth); 
+  // var lnotcornell = new Chord(300, topofcornell, 300 - cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
+  // var rnotcornell = new Chord(550 + cornelltwidth/2, topofcornell, 550 + cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
+
+  // svg.append("path")
+  // .attr("d", lnotcornell.path())
+  // .attr("class", "chord")
+  // .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
+ 
+  // svg.append("path")
+  // .attr("d", rnotcornell.path())
+  // .attr("class", "chord")
+  // .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
+ 
+
+  // svg.append("path")
+  // .attr("d", cornell.path())
+  // .attr("class", "chord")
+  // .attr("fill", vertGrad("grad-cornell", ["hsl(240, 100%, 44%)", "hsl(225, 90%, 61%)"]));
  
 
 

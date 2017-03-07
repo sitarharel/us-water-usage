@@ -161,7 +161,8 @@ function StateStream(width, states, res_index, height, stream_margin, x_offset, 
   y_offset = y_offset || 0;
 
   var percent_scale = width / states.reduce((a, x) => x.percent + a, 0);
-  states = states.map((x) => {return {name: x.name, size: x.percent * percent_scale, id: x.id}});
+  states = states.map((x) => {return {name: x.name, 
+    size: x.percent * percent_scale, id: x.id, val: x.val}});
   var result = {path_fade: "", path_out: "", text: []}
 
   var mid_width = states.length * stream_margin + width;
@@ -173,6 +174,7 @@ function StateStream(width, states, res_index, height, stream_margin, x_offset, 
     if(i == res_index){
       out = out + (new Chord(xt, y_offset, xb, y_offset + height/2, states[i].size )).path();
       out = out + " " + (new Chord(xb, y_offset + height/2, x_offset, y_offset + height * 3/4, states[i].size, width)).path();
+      result.outval = states[i].val;
     } else {
       var y_squish_fac = Math.cos(( xb + states[i].size/2 - x_offset - width/2)/mid_width);
       var x_squish_fac = 1 - Math.cos(( xb + states[i].size/2 - x_offset - width/2)/mid_width);
