@@ -3,7 +3,7 @@ var topOfSpout = topOfIntro+50;
 var topOfWaterUsage = topOfSpout + 580;
 var moveCollegeDown = 8100;
 
-function visualize(usData, nyData, statePercents){
+function visualize(usData, nyData, statePercents, counties){
   var svg = d3.select("svg");
 
 
