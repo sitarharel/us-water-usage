@@ -36,7 +36,7 @@ var ny_countytoregion = {
 	"Tioga": "Southern Tier",
 	"Broome": "Southern Tier",
 	"Chenango": "Southern Tier",
-	"Delaware": "Southern Tier",
+	"Delaware": "Hudson Valley",
 	"Tompkins": "Southern Tier",
 	"Schuyler": "Southern Tier",
 	"Oswego": "Central New York",

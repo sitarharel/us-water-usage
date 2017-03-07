@@ -239,11 +239,8 @@ function visualize(usData, nyData, statePercents, counties){
   .attr("x", 550)
   .attr("y", topOfSpout + 6710);
 
-
-console.log(counties);
-
   var topofregion = topOfSpout + 8249;
-  var regionsplit = StateStream(500, counties, 1, 1500, 30, 300, topofregion);
+  var regionsplit = StateStream(500, counties, 7, 1500, 30, 300, topofregion, true);
 
   svg.append("path")
   .attr("d", regionsplit.path_out)
@@ -268,28 +265,21 @@ console.log(counties);
   .attr("y", (t) => t.y);
 
 
-  // var topofcornell = topOfSpout + 8249;
-  // var cornelltwidth = 0.885;
-  // var cornellbwidth = 50;
-  // var cornell = new Chord(550 - cornelltwidth/2, topofcornell, 550 - cornellbwidth/2, topofcornell + 700, cornelltwidth, cornellbwidth); 
-  // var lnotcornell = new Chord(300, topofcornell, 300 - cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
-  // var rnotcornell = new Chord(550 + cornelltwidth/2, topofcornell, 550 + cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
+  var topofcornell = topofregion + 1125;
+  var cornelltwidth = 19.56;
+  var cornellbwidth = 50;
+  var cornell = new Chord(550 - cornelltwidth/2, topofcornell, 550 - cornellbwidth/2, topofcornell + 700, cornelltwidth, cornellbwidth); 
+  var lnotcornell = new Chord(300, topofcornell, 300 - cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
 
-  // svg.append("path")
-  // .attr("d", lnotcornell.path())
-  // .attr("class", "chord")
-  // .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
- 
-  // svg.append("path")
-  // .attr("d", rnotcornell.path())
-  // .attr("class", "chord")
-  // .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
- 
+  svg.append("path")
+  .attr("d", lnotcornell.path())
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
 
-  // svg.append("path")
-  // .attr("d", cornell.path())
-  // .attr("class", "chord")
-  // .attr("fill", vertGrad("grad-cornell", ["hsl(240, 100%, 44%)", "hsl(225, 90%, 61%)"]));
+  svg.append("path")
+  .attr("d", cornell.path())
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-cornell", ["hsl(240, 100%, 44%)", "hsl(225, 90%, 61%)"]));
  
 
 
