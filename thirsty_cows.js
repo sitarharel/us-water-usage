@@ -1,6 +1,6 @@
-var graphSize = 275;
-var graphY = topOfSpout + 3750;
-var graphX = 900;
+var graphSize = 330;
+var graphY = topOfSpout + 4200;
+var graphX = 840;
 
 var waterKG = [{"name": "Vegetables", "value": 85}, {"name": "Fruits", "value": 254},
 			   {"name": "Chicken", "value": 1142}, {"name": "Nuts", "value": 2394},  
@@ -9,20 +9,17 @@ var waterKG = [{"name": "Vegetables", "value": 85}, {"name": "Fruits", "value": 
 var svg = d3.select("svg");
 
 var padding = 30; 
-var strokeWidth = 30;
+var strokeWidth = 45;
 
-var waterScale = d3.scaleLinear().domain([0, 4500]).range([graphY, graphY + graphSize]);
-var produceScale = d3.scaleLinear().domain([0, waterKG.length+1]).range([graphX + graphSize, graphX]);
+var waterScale = d3.scaleLinear().domain([0, 4500]).range([graphY, graphY + 450]);
+var produceScale = d3.scaleLinear().domain([0, waterKG.length]).range([graphX + graphSize, graphX]);
 var colorScale = d3.scaleLinear().domain([0,4200]).range(["#b3f4ef", "#1d20e2"]);
+var colorScale2 = d3.scaleLinear().domain([0,4200]).range(["#5084c1", "#180d9d"]);
+
 
 top = d3.axisTop(produceScale).tickFormat("");
 
-right = d3.axisRight(waterScale).ticks(5);
-
-// svg.append("g")
-// .attr("class", "grid")
-// .call(d3.axisBottom(produceScale).tickFormat("").tickSize(-graphSize))
-// .attr("transform", "translate(0, " + (graphY + graphSize) + ")");
+right = d3.axisRight(waterScale).ticks(5, "s");
 
 svg.append("g")
 .attr("class", "grid")
@@ -35,31 +32,26 @@ svg.append("g")
 
 waterKG.forEach(function (d, i) {
 
-	svg.append("line")
-	.attr("x1", produceScale(i+1)) 
-	.attr("y1", waterScale(0)) 
-	.attr("x2", produceScale(i+1)) 
-	.attr("y2", waterScale(d.value))
-	.style("stroke", vertGrad("grad-cows", ["#b3f4ef", "#ffffff"]))
-	.style("stroke-width", strokeWidth);
+	svg.append("rect")
+	.attr("x", produceScale(i+1)) 
+	.attr("y", waterScale(0)) 
+	.attr("height", waterScale(d.value) - waterScale(0))
+	.style("fill", vertGrad("grad-cows"+i, [colorScale2(d.value), colorScale(d.value), "#ffffff"]))
+	.style("width", strokeWidth);
 
 	svg.append("image")
   	.attr("href", "img/" + d.name + ".svg")
-  	.attr("height", "30px")
-  	.attr("width", "30px")
-  	.attr("x", produceScale(i+1)-strokeWidth/2)
+  	.attr("height", strokeWidth + 5)
+  	.attr("width", strokeWidth + 5)
+  	.attr("x", produceScale(i+1))
   	.attr("y", graphY - strokeWidth * 1.5);
 
 });
-
-svg.append("g").call(top)
-.attr("transform", "translate(0, "+ graphY +")");
 
 svg.append("text")
 .attr("class","centered-text")
 .text("Gallons to produce 1 KG")
 .attr("x", graphX + graphSize/2)
-.attr("y", graphY + graphSize + 50)
+.attr("y", graphY + 500)
 .attr("font-size", "18px");
-
 
