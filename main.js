@@ -1,11 +1,9 @@
 var topOfIntro = 60;
 var topOfSpout = topOfIntro+50;
 var topOfWaterUsage = topOfSpout + 580;
+var svg = d3.select("svg");
 
 function visualize(usData, nyData, statePercents, counties){
-  var svg = d3.select("svg");
-
-
   var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
   var statesplit = new StateStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
   var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1502, 120, 500);
