@@ -4,6 +4,23 @@ function arraySum(arr){
   }, 0);
 }
 
+var defs = d3.select("svg").append("defs");
+
+var vertGrad = function(id, offsets){
+  var grad = defs.append("linearGradient")
+  .attr("id", id || "gradient")
+  .attr("x1", "0%")
+  .attr("y1", "0%")
+  .attr("x2", "0%")
+  .attr("y2", "100%");
+  for(var i = 0; i < offsets.length; i++){
+    grad.append("stop")
+    .attr("offset", i * 100/(offsets.length - 1) + "%")
+    .attr("stop-color", offsets[i]);
+  }
+  return "url(#" + grad.attr("id") + ")";
+}
+
 var rand_data = function(num, size) {
   var res = [];
   for(var i = 0; i < num; i++){
@@ -160,7 +177,7 @@ function StateStream(width, states, res_index, height, stream_margin, x_offset, 
       var y_squish_fac = Math.cos(( xb + states[i].size/2 - x_offset - width/2)/mid_width);
       var x_squish_fac = 1 - Math.cos(( xb + states[i].size/2 - x_offset - width/2)/mid_width);
       if(xb > x_offset + width/2) x_squish_fac *= -1;
-      var text = {name: states[i].name, x: xb + states[i].size/2 + 80*x_squish_fac, y: y_offset + height/2 - (height/2 + 50) + (height/2) * y_squish_fac};
+      var text = {name: states[i].name, x: xb + states[i].size/2 + 60*x_squish_fac, y: y_offset + height/2 - (height/2 + 50) + (height/2) * y_squish_fac};
       if(states[i].id) text.id = states[i].id;
       result.text.push(text);
       chords.push(new Chord(xt, y_offset, xb, y_offset + height/2 , states[i].size));

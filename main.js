@@ -9,28 +9,9 @@ function visualize(usData, nyData, statePercents){
 
   var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
   var statesplit = new StateStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
-
-  var nysplit = new StateStream(500, nyData, 2, 2000, 55, 300, topOfSpout+6749);
   var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1502, 120, 500);
 
   var cornell = new Chord(500, topOfSpout + 8249, 300, topOfSpout + 10000, 0.885, 500); 
-
-  var defs = svg.append("defs");
-
-  var vertGrad = function(id, offsets){
-    var grad = defs.append("linearGradient")
-    .attr("id", id || "gradient")
-    .attr("x1", "0%")
-    .attr("y1", "0%")
-    .attr("x2", "0%")
-    .attr("y2", "100%");
-    for(var i = 0; i < offsets.length; i++){
-      grad.append("stop")
-      .attr("offset", i * 100/(offsets.length - 1) + "%")
-      .attr("stop-color", offsets[i]);
-    }
-    return "url(#" + grad.attr("id") + ")";
-  }
   
   //creating title text 
   var titleWords = ["United States", "Daily Water", "Consumption"]
@@ -111,11 +92,6 @@ function visualize(usData, nyData, statePercents){
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-top", ["hsl(225, 90%, 61%)", "hsl(235, 90%, 61%)"]));
 
-
-  svg.append("path")
-  .attr("d", cornell.path())
-  .attr("class", "chord")
-  .attr("fill", vertGrad("grad-top", ["hsl(225, 90%, 61%)", "hsl(235, 90%, 61%)"]));
 
   svg.append("path")
   .attr("d", sectorstream.path)
@@ -213,11 +189,13 @@ function visualize(usData, nyData, statePercents){
   .append("text")
   .text((d) => d.name)
   .attr("text-anchor", "beginning")
+  .attr("font-size", "14")
   .attr("dominant-baseline", "middle")
-  .attr("transform", (t) => "rotate(70, " + t.x + ", " + t.y + ")")
+  .attr("transform", (t) => "rotate(80, " + t.x + ", " + t.y + ")")
   .attr("x", (t) => t.x)
   .attr("y", (t) => t.y);
 
+  var nysplit = new StateStream(500, nyData, 2, 2000, 55, 300, topOfSpout+6749);
 
   svg.append("path")
   .attr("d", nysplit.path_out)
@@ -238,6 +216,54 @@ function visualize(usData, nyData, statePercents){
   .attr("width", "60px")
   .attr("x", (t) => t.x - 30)
   .attr("y", (t) => t.y - 30);
+
+  //new york state label
+  svg.append("image")
+  .attr("href", "NY.svg")
+  .attr("x", 360)
+  .attr("y", 6520)
+  .attr("height", 220);
+  
+  // Annotation for total NY width
+  svg.append("path")
+  .attr("d", scaleLine(300, topOfSpout+6730, 500).d)
+  .style("fill", "none")
+  .style("stroke", "black")
+  .style("stroke-width", "4");
+
+  svg.append("text")
+  .text("10.9 Billion gpd")
+  .attr("text-anchor", "middle")
+  .attr("font-size", "40")
+  .style("fill", "black")
+  .attr("x", 550)
+  .attr("y", topOfSpout + 6710);
+
+
+  var topofcornell = topOfSpout + 8249;
+  var cornelltwidth = 0.885;
+  var cornellbwidth = 50;
+  var cornell = new Chord(550 - cornelltwidth/2, topofcornell, 550 - cornellbwidth/2, topofcornell + 700, cornelltwidth, cornellbwidth); 
+  var lnotcornell = new Chord(300, topofcornell, 300 - cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
+  var rnotcornell = new Chord(550 + cornelltwidth/2, topofcornell, 550 + cornellbwidth/2, topofcornell + 70, 250 - cornelltwidth/2)
+
+  svg.append("path")
+  .attr("d", lnotcornell.path())
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
+ 
+  svg.append("path")
+  .attr("d", rnotcornell.path())
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-notcornell", ["hsl(240, 100%, 44%)", "#ffffff", "#ffffff"]));
+ 
+
+  svg.append("path")
+  .attr("d", cornell.path())
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-cornell", ["hsl(240, 100%, 44%)", "hsl(225, 90%, 61%)"]));
+ 
+
 
 
   var niagraFalls = new Chord(120, topOfWaterUsage+735-100, 200, topOfSpout + 1500, 20, 57.75);
@@ -280,13 +306,6 @@ function visualize(usData, nyData, statePercents){
   .attr("y", topOfWaterUsage+590-100)
   .style("fill", "#2f2e33")
   .style("font-size", "30px");
-  
-  //new york state label
-  svg.append("image")
-  .attr("href", "NY.svg")
-  .attr("x", 360)
-  .attr("y", 6550)
-  .attr("height", 220);
   
   // var titleWords = ["New", "York"]
 //   for (i=0; i<2; i++) {
