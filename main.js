@@ -106,6 +106,14 @@ function visualize(usData, nyData, statePercents, counties){
   .style("fill", "black")
   .attr("x", 550)
   .attr("y", topOfSpout + 1630);
+  
+  svg.append("text")
+  .text("gpd = gallons per day")
+  .attr("text-anchor", "middle")
+  .attr("font-size", "18")
+  .style("fill", "black")
+  .attr("x", 950)
+  .attr("y", topOfSpout + 1680);
 
   // US sector merge stream
   var sectors = svg.selectAll("g.us_sector")
