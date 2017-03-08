@@ -1,54 +1,47 @@
-var topOfIntro = 60;
-var topOfSpout = topOfIntro+50;
-var topOfWaterUsage = topOfSpout + 580;
+var topOfSpout = 110;
 var svg = d3.select("svg");
 
 function visualize(usData, nyData, statePercents, counties){
-  var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
-  var statesplit = new SplitStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
-  var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1502, 120, 500);
+  var topOfWaterUsage = topOfSpout + 580;
+  var topOfIntro = 60;
 
-  var cornell = new Chord(500, topOfSpout + 8249, 300, topOfSpout + 10000, 0.885, 500); 
-  
   //creating title text 
   var titleWords = ["United States", "Daily Water", "Consumption"]
   for (i=0; i<3; i++) {
-	  svg.append("text")
-	  .text(titleWords[i])
-	  .attr("x", 50)
-	  .attr("y", topOfIntro + 50 + 90*i)
-	  .style("font-size", "80px")
-	  .style("fill", "#2f2e33");
+    svg.append("text")
+    .text(titleWords[i])
+    .attr("x", 50)
+    .attr("y", topOfIntro + 50 + 90*i)
+    .style("font-size", "80px")
+    .style("fill", "#2f2e33");
   }
   
-  //title image
+  //title image (man drinking)
   svg.append("image")
-  .attr("href", "manDrinking.svg")
+  .attr("href", "img/manDrinking.svg")
   .attr("x", 70)
   .attr("y", topOfIntro+280)
   .attr("height", 310)
   .attr("width", 310);
-  //
- 
 
   //Niagara falls factoid
-
-  var niagaraFalls = new Chord(120, topOfWaterUsage+735-100, 200, topOfSpout + 1500, 20, 57.75);
+  var niagaraFalls = Chord(120, topOfWaterUsage+735-100, 200, 
+    topOfSpout + 1500, 20, 57.75);
 
   svg.append("image")
-  .attr("href", "waterfall.svg")
+  .attr("href", "img/waterfall.svg")
   .attr("x", 40)
   .attr("y", topOfWaterUsage+600-100)
   .attr("height", 220)
   .attr("widht", 220);
   
   svg.append("path")
-  .attr("d", niagaraFalls.path())
+  .attr("d", niagaraFalls)
   .attr("class", "chord")
   .attr("fill", "#b3f4ef");
 
   svg.append("path")  
-  .attr("d", (new Chord(200, topOfSpout + 1500, 200, topOfSpout + 1600, 57.75)).path())
+  .attr("d", (Chord(200, topOfSpout + 1500, 200, topOfSpout + 1600, 57.75)))
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-niagra", ["#b3f4ef", "#ffffff"]));
 // 
@@ -73,16 +66,70 @@ function visualize(usData, nyData, statePercents, counties){
   .style("font-size", "30px");
   
   // Stream out of the faucet
+  var topstream = Chord(500, topOfSpout+500, 300, topOfSpout+1502, 120, 500);
+
   svg.append("path")
-  .attr("d", topstream.path())
+  .attr("d", topstream)
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-top", ["hsl(225, 90%, 61%)", "hsl(235, 90%, 61%)"]));
 
   // US sectors merge stream 
+  var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
+
   svg.append("path")
   .attr("d", sectorstream.path)
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-sector", ["hsl(235, 90%, 61%)", "hsl(240, 100%, 44%)"]));
+
+  var sectors = svg.selectAll("g.us_sector")
+  .data(sectorstream.text)
+  .enter();
+
+  sectors.append("image")
+  .attr("href", (d) => "img/" + d.id + ".svg")
+  .attr("height", "60px")
+  .attr("width", "60px")
+  .attr("x", (t) => t.x - 30)
+  .attr("y", (t, i) => t.y + 45 - 90 * (i % 2));
+
+  sectors.append("image")
+  .attr("href", (d) => "img/" + d.id + ".svg")
+  .attr("height", "60px")
+  .attr("width", "60px")
+  .attr("x", (t) => 970)
+  .attr("y", (t, i) => t.y - 4 * 80 + 80 * i);
+
+  sectors.append("text")
+  .text((d) => d.name)
+  .attr("dominant-baseline", "middle")
+  .attr("font-size", "25")
+  .attr("x", (t) => 1040)
+  .attr("y", (t, i) => t.y - 4 * 80 + 80 * i + 30);
+
+  // State Splits
+  var statesplit = new SplitStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
+
+  svg.append("path")
+  .attr("d", statesplit.path_out)
+  .attr("class", "chord")
+  .attr("fill", vertGrad("grad-nytop", ["hsl(240, 100%, 44%)", "hsl(230, 90%, 61%)"]));
+
+  svg.append("path")
+  .attr("d", statesplit.path_fade)
+  .attr("class", "chord")
+  .attr("fill", "url(#statesfadeout)");
+
+  svg.selectAll("g.states")
+  .data(statesplit.text)
+  .enter()
+  .append("text")
+  .text((d) => d.name)
+  .attr("text-anchor", "beginning")
+  .attr("font-size", "14")
+  .attr("dominant-baseline", "middle")
+  .attr("transform", (t) => "rotate(80, " + t.x + ", " + t.y + ")")
+  .attr("x", (t) => t.x)
+  .attr("y", (t) => t.y);
 
   // Annotation for total US width
   svg.append("path")
@@ -115,55 +162,6 @@ function visualize(usData, nyData, statePercents, counties){
   .attr("x", 950)
   .attr("y", topOfSpout + 1680);
 
-  // US sector merge stream
-  var sectors = svg.selectAll("g.us_sector")
-  .data(sectorstream.text)
-  .enter();
-
-  sectors.append("image")
-  .attr("href", (d) => "img/" + d.id + ".svg")
-  .attr("height", "60px")
-  .attr("width", "60px")
-  .attr("x", (t) => t.x - 30)
-  .attr("y", (t, i) => t.y + 45 - 90 * (i % 2));
-
-  sectors.append("image")
-  .attr("href", (d) => "img/" + d.id + ".svg")
-  .attr("height", "60px")
-  .attr("width", "60px")
-  .attr("x", (t) => 970)
-  .attr("y", (t, i) => t.y - 4 * 80 + 80 * i);
-
-  sectors.append("text")
-  .text((d) => d.name)
-  .attr("dominant-baseline", "middle")
-  .attr("font-size", "25")
-  .attr("x", (t) => 1040)
-  .attr("y", (t, i) => t.y - 4 * 80 + 80 * i + 30);
-
-  // State Splits
-  svg.append("path")
-  .attr("d", statesplit.path_out)
-  .attr("class", "chord")
-  .attr("fill", vertGrad("grad-nytop", ["hsl(240, 100%, 44%)", "hsl(230, 90%, 61%)"]));
-
-  svg.append("path")
-  .attr("d", statesplit.path_fade)
-  .attr("class", "chord")
-  .attr("fill", "url(#statesfadeout)");
-
-  svg.selectAll("g.states")
-  .data(statesplit.text)
-  .enter()
-  .append("text")
-  .text((d) => d.name)
-  .attr("text-anchor", "beginning")
-  .attr("font-size", "14")
-  .attr("dominant-baseline", "middle")
-  .attr("transform", (t) => "rotate(80, " + t.x + ", " + t.y + ")")
-  .attr("x", (t) => t.x)
-  .attr("y", (t) => t.y);
-
   // NY state sectors split 
   var nysplit = new SplitStream(500, nyData, 2, 2000, 55, 300, topOfSpout+6749);
 
@@ -189,7 +187,7 @@ function visualize(usData, nyData, statePercents, counties){
 
   //new york state label
   svg.append("image")
-  .attr("href", "NY.svg")
+  .attr("href", "img/NY.svg")
   .attr("x", 360)
   .attr("y", 6520)
   .attr("height", 220);
@@ -237,7 +235,7 @@ function visualize(usData, nyData, statePercents, counties){
 
   // Annotation for total NY Public Supply width
   svg.append("image")
-  .attr("href", "NY.svg")
+  .attr("href", "img/NY.svg")
   .attr("x", 470)
   .attr("y", topofregion - 300)
   .attr("height", 220);
@@ -281,26 +279,29 @@ function visualize(usData, nyData, statePercents, counties){
   var topofcornell = topofregion + 1200;
   var cornelltwidth = 19.56;
   var cornellbwidth = 100;
-  var cornell = new Chord(300, topofcornell, 550 - cornellbwidth/2, topofcornell + 700, cornelltwidth, cornellbwidth); 
-  var notcornell = new Chord(300 + cornelltwidth, topofcornell, cornelltwidth + 450, topofcornell + 500, 500 - cornelltwidth, 350 - cornelltwidth)
+  var cornell = Chord(300, topofcornell, 550 - cornellbwidth/2, 
+    topofcornell + 700, cornelltwidth, cornellbwidth); 
+  var notcornell = Chord(300 + cornelltwidth, topofcornell, 
+    cornelltwidth + 450, topofcornell + 500, 500 - cornelltwidth, 350 - cornelltwidth)
 
   svg.append("path")
-  .attr("d", (new Chord(300, topofregion + 1125, 300, topofcornell, 500)).path())
+  .attr("d", (Chord(300, topofregion + 1125, 300, topofcornell, 500)))
   .attr("class", "chord")
   .attr("fill", "hsl(230, 90%, 61%)");
 
   svg.append("path")
-  .attr("d", notcornell.path())
+  .attr("d", notcornell)
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-notcornell", ["hsl(230, 90%, 61%)", "#ffffff", "#ffffff"]));
 
   svg.append("path")
-  .attr("d", cornell.path())
+  .attr("d", cornell)
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-cornell", ["hsl(230, 90%, 61%)", "red"]));
  
    svg.append("path")
-  .attr("d", (new Chord(550 - cornellbwidth/2, topofcornell + 700, 550 - cornellbwidth/2, topofcornell + 800, cornellbwidth)).path())
+  .attr("d", (Chord(550 - cornellbwidth/2, topofcornell + 700, 
+    550 - cornellbwidth/2, topofcornell + 800, cornellbwidth)))
   .attr("class", "chord")
   .attr("fill", vertGrad("grad-cornell-fade", ["red", "white"]));
 
@@ -329,7 +330,8 @@ function visualize(usData, nyData, statePercents, counties){
 
   // Annotation for total Cornell width
   svg.append("path")
-  .attr("d", scaleLine(550 - cornellbwidth/2, topofcornell + 700, cornellbwidth, 40).d)
+  .attr("d", scaleLine(550 - cornellbwidth/2, topofcornell + 700, 
+    cornellbwidth, 40).d)
   .style("fill", "none")
   .style("stroke", "black")
   .style("stroke-width", "3");
@@ -370,7 +372,7 @@ function visualize(usData, nyData, statePercents, counties){
   //average drinking per day image text creation
   for (i=0; i<3; i++) {
     svg.append("image")
-    .attr("href", "water.svg")
+    .attr("href", "img/waterbottle.svg")
     .attr("x", 850 + 50*i)
     .attr("y", topofcornell + 390)
     .attr("width", 100)
@@ -396,7 +398,7 @@ function visualize(usData, nyData, statePercents, counties){
   for (i=0; i<30; i++){
     for(j=0; j<17; j++) {
       svg.append("image")
-      .attr("href", "water.svg")
+      .attr("href", "img/waterbottle.svg")
       .attr("x", 750 + i*13)
       .attr("y",  j*25 -30 + topofcornell + 600)
       .attr("width", 18)
@@ -404,6 +406,7 @@ function visualize(usData, nyData, statePercents, counties){
     }
   }
 
+  //creating label for array of water bottles
   svg.append("text")
   .text("water the average college student uses per day")
   .attr("x", 950)
@@ -412,30 +415,19 @@ function visualize(usData, nyData, statePercents, counties){
   .style("font-size", "20px")
   .attr();
 
-  //creating label for array of water bottles
-  // var avgWaterUseWords = ["water the average", "college student", "uses per day"]
-
-  // for (i=0; i<3; i++) {
-  //   svg.append("text")
-  //   .text(avgWaterUseWords[i])
-  //   .attr("x", 950)
-  //   .attr("y", 30*i + topofcornell + 790)
-  //   .attr("text-anchor", "middle")
-  //   .style("font-size", "30px")
-  //   .style("font-weight", "bold");
-  // }
-  
   addTap(svg);
 }
 
 function addTap(svg){
+  // add actual tap svg
   svg.append("image")
-  .attr("href", "tap.svg")
+  .attr("href", "img/tap.svg")
   .attr("x", "430")
   .attr("y", topOfSpout)
   .attr("height", "800px")
   .attr("width", "800px");
 
+  // this is for adding the two halves of the United States (aesthetic)
   svg.append("clipPath")
   .attr("id", "leftclip")
   .append("rect")

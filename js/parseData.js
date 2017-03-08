@@ -31,7 +31,7 @@ function calcPercent (obj) {
   return value;
 }
 
-d3.tsv("usco2010.tsv", parseLine, function (error, data) {
+d3.tsv("data/usco2010.tsv", parseLine, function (error, data) {
 
   // [ { "id": sector_acronym, "name" : sector_name, 
   //     "val": Mgal/day, "percent": sector percent of US total }, ...]
@@ -108,7 +108,7 @@ d3.tsv("usco2010.tsv", parseLine, function (error, data) {
   usData = calcPercent(usData);
 
   // Map state acronyms to full names
-  d3.json("states_hash.json", function(stateDict) {
+  d3.json("data/states_hash.json", function(stateDict) {
     stateData.forEach( function (d) {
       statePercents.push({ "id": d["key"].toUpperCase(),
                            "name": stateDict[d["key"]], 
