@@ -69,13 +69,14 @@ d3.tsv("data/usco2010.tsv", parseLine, function (error, data) {
   countyData = countyData[0]["values"].reduce( function (acc, curr) {
     var county = curr["county"].substring(0, curr["county"].length-7);
     var region = ny_countytoregion[county];
-    if (!region) {
-      console.log(county);
-    }
+    
+    // NYC is 0 so don't show that...
+    if(region != "New York City"){ 
     if (!(region in acc)) {
-          acc[region] = 0;
+             acc[region] = 0;
+       }
+       acc[region] = parseFloat(acc[region]) + parseFloat(curr["ps-wtotl"]);
     }
-    acc[region] = parseFloat(acc[region]) + parseFloat(curr["ps-wtotl"]);
     return acc;
   }, {});
 
@@ -115,6 +116,7 @@ d3.tsv("data/usco2010.tsv", parseLine, function (error, data) {
                            "percent": parseFloat(d.values["to-wtotl"])/usTotal });
     })
     statePercents.sort( (a, b)  => { return (b["percent"] - a["percent"]); });
+    // call visualization
     visualize(usData, nyData, statePercents, regionPSData);
   });
 
