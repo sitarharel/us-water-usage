@@ -71,19 +71,6 @@ function Chord(startx, starty, endx, endy, startWidth, endWidth, bend_len){
   this.startWidth = startWidth || 0;
   this.endWidth = endWidth || startWidth;
   this.bend_len = bend_len || (endy - starty) / 2;
-  this.left = function(){
-    return "M" + this.startx + " " + this.starty + " C" + this.startx + " " 
-              + (this.starty + this.bend_len) + " " + this.endx + " " 
-              + (this.endy - this.bend_len) + " " + this.endx + " " 
-              + this.endy;
-  }
-  this.right = function(){
-    return "M" + (this.endx + this.endWidth) + " " 
-              + this.endy + " C" + (this.endx + this.endWidth) + " " 
-              + (this.endy - this.bend_len) + " " + (this.startx + this.startWidth) 
-              + " " + (this.starty + this.bend_len) + " " 
-              + (this.startx + this.startWidth) + " " + this.starty;
-  }
   this.path = function(){
     return "M" + this.startx + " " + this.starty + " C" + this.startx + " " 
               + (this.starty + this.bend_len) + " " + this.endx + " " 
@@ -94,38 +81,6 @@ function Chord(startx, starty, endx, endy, startWidth, endWidth, bend_len){
               + " " + (this.starty + this.bend_len) + " " 
               + (this.startx + this.startWidth) + " " + this.starty + " L" 
               + this.startx + " " + this.starty + " Z";
-  }
-}
-
-function Stream(startsize, splits, height, x_offset, y_offset) {
-  this.size = startsize;
-  this.splits = splits;
-  this.height = height || 1000;
-  this.x_offset = x_offset || 100;
-  this.y_offset = y_offset || 0;
-  this.path = function(svg){
-    var split_l = this.height / (this.splits.length + 1);
-    var main_width = this.size;
-    var wiggle = 30;
-    var chords = [new Chord(this.x_offset, this.y_offset, this.x_offset + wiggle, this.y_offset + split_l, main_width)];
-    var px = this.x_offset + wiggle;
-    var py = split_l;
-    for(var i = 0; i < this.splits.length; i++){
-      main_width -= splits[i];
-      if(wiggle < 0){
-      chords.push(new Chord(px, this.y_offset + py, px + wiggle, this.y_offset + py + split_l, main_width));
-      chords.push(new Chord(px + main_width, this.y_offset + py, px + main_width - wiggle, this.y_offset + py + split_l * 1.2, splits[i]));
-
-      }else{
-      chords.push(new Chord(splits[i] + px, this.y_offset + py, splits[i] + px + wiggle, this.y_offset + py + split_l, main_width));
-      chords.push(new Chord(px, this.y_offset + py, px - wiggle, this.y_offset + py + split_l * 1.2, splits[i]));
-      px += splits[i];
-      }
-      px += wiggle;
-      py += split_l;
-      wiggle *= -1;
-    }
-    return chords.reduce((acc, x) => acc + " " + x.path(), "");
   }
 }
 
@@ -154,7 +109,7 @@ function mergeStream(width, splits, height, stream_margin, x_offset, y_offset){
   return result;
 }
 
-function StateStream(width, states, res_index, height, stream_margin, x_offset, y_offset){
+function SplitStream(width, states, res_index, height, stream_margin, x_offset, y_offset){
   height = height || 1000;
   stream_margin = stream_margin || 10;
   x_offset = x_offset || 0;

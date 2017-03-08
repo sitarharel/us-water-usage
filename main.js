@@ -5,7 +5,7 @@ var svg = d3.select("svg");
 
 function visualize(usData, nyData, statePercents, counties){
   var sectorstream = mergeStream(500, usData, 3000, 30, 300, topOfSpout+1500);
-  var statesplit = new StateStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
+  var statesplit = new SplitStream(500, statePercents, 9, 3001, 11, 300, topOfSpout+4499);
   var topstream = new Chord(500, topOfSpout+500, 300, topOfSpout+1502, 120, 500);
 
   var cornell = new Chord(500, topOfSpout + 8249, 300, topOfSpout + 10000, 0.885, 500); 
@@ -157,7 +157,7 @@ function visualize(usData, nyData, statePercents, counties){
   .attr("y", (t) => t.y);
 
   // NY state sectors split 
-  var nysplit = new StateStream(500, nyData, 2, 2000, 55, 300, topOfSpout+6749);
+  var nysplit = new SplitStream(500, nyData, 2, 2000, 55, 300, topOfSpout+6749);
 
   svg.append("path")
   .attr("d", nysplit.path_out)
@@ -203,7 +203,7 @@ function visualize(usData, nyData, statePercents, counties){
 
   // Public supply NY state region splits
   var topofregion = topOfSpout + 8249;
-  var regionsplit = StateStream(500, counties, 7, 1500, 30, 300, topofregion, true);
+  var regionsplit = SplitStream(500, counties, 7, 1500, 30, 300, topofregion, true);
 
   svg.append("path")
   .attr("d", regionsplit.path_out)
