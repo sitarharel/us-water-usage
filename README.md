@@ -4,7 +4,9 @@
 
 This was a group project for Cornell's CS 3300. We were instructed to create a static visualization of some data - static in the sense that it could be printed on a poster. This is the result of that project, a collaboration between David Miron, Linda Liu, and Sitar Harel.
 
-## Visualization Explanation
+__The project is hosted [here](http://sitarharel.com/water/)__.
+
+### Explanation
 
 The data is represented by one large stream flowing from a tap. The width of the stream is given as the amount of water used per annum in the US. The stream goes on to split and flow around in different ways, while showing the amount of water used by different sectors and states through adjusted widths of the stream. 
 
