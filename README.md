@@ -10,4 +10,4 @@ __The project is hosted [here](http://sitarharel.com/water/)__.
 
 The data is represented by one large stream flowing from a tap. The width of the stream is given as the amount of water used per annum in the US. The stream goes on to split and flow around in different ways, while showing the amount of water used by different sectors and states through adjusted widths of the stream. 
 
-The stream is comprised of many chords (which are in turn made of bezier curves) which serve to create a feeling of a stream flowing while maintaining precision of the data presented and allowing the user to get a feeling of the fractions of the US's total water supply used be different industries and ultimately by Cornell University itself.
+The stream is comprised of many chords (made of bezier curves) which serve to create a feeling of a stream flowing while maintaining precision of the data presented and allowing the user to get a feeling of the fractions of the US's total water supply used be different industries and ultimately by Cornell University itself.
